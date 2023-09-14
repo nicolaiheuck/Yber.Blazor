@@ -22,6 +22,6 @@ Table Uber_Cities {
   Zipcode integer [primary key]
   City nvarchar(75)
 }
-Ref: Uber_Students.Zipcode - Uber_Cities.Zipcode
+Ref: Uber_Students.Zipcode > Uber_Cities.Zipcode
 Ref: Uber_Students.Id > Uber_Requests.RequesterID
 Ref: Uber_Students.Id > Uber_Requests.RequesteeID
