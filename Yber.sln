@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yber.Blazor", "Yber.Blazor\Yber.Blazor.csproj", "{CBC72092-9868-4549-82BD-D49DB9B58015}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yber.API", "Yber.API\Yber.API.csproj", "{0E1A57E5-DAD2-4A6A-9A17-56FF0E3084CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{CBC72092-9868-4549-82BD-D49DB9B58015}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBC72092-9868-4549-82BD-D49DB9B58015}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBC72092-9868-4549-82BD-D49DB9B58015}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E1A57E5-DAD2-4A6A-9A17-56FF0E3084CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E1A57E5-DAD2-4A6A-9A17-56FF0E3084CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E1A57E5-DAD2-4A6A-9A17-56FF0E3084CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E1A57E5-DAD2-4A6A-9A17-56FF0E3084CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
