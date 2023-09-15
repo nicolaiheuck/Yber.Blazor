@@ -9,8 +9,9 @@ namespace Yber.API.Controllers;
 public class CarpoolController : ControllerBase
 {
     [HttpGet(Name = "GetStudents")]
-    public Task<IEnumerable<double[]>> GetStudentLocationsAsync()
+    public async Task<IEnumerable<double[]>> GetStudentLocationsAsync()
     {
-        
+        // Not implemented
+        return null;
     }
 }
