@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Yber.Blazor.Data;
 using Yber.Blazor.Extensions;
+using Yber.Repositories.Interfaces;
+using Yber.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.RegisterDependencies("Yber.Blazor.Services");
+builder.RegisterDependencies("Yber.Services.Interfaces", "Yber.Services.Services", "Yber.Repositories.Interfaces", "Yber.Repositories.Repositories");
+IExampleRepository a = null;
+IExampleService b = null;
 
 var app = builder.Build();
 
