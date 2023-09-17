@@ -1,4 +1,4 @@
-﻿namespace Energy.Services.DTO
+﻿namespace Yber.Services.DTO
 {
     public class Class1
     {

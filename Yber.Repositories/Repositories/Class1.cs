@@ -1,4 +1,4 @@
-﻿namespace Energy.Repository
+﻿namespace Yber.Repositories.Repositories
 {
     public class Class1
     {

@@ -1,4 +1,4 @@
-﻿namespace Energy.Services.Services
+﻿namespace Yber.Services.Services
 {
     public class Class1
     {
