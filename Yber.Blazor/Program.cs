@@ -1,9 +1,5 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Yber.Blazor.Data;
 using Yber.Blazor.Extensions;
-using Yber.Repositories.Interfaces;
-using Yber.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
