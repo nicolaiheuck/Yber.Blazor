@@ -11,9 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.RegisterDependencies("Yber.Services.Interfaces", "Yber.Services.Services", "Yber.Repositories.Interfaces", "Yber.Repositories.Repositories");
-IExampleRepository a = null;
-IExampleService b = null;
+builder.RegisterDependencies();
 
 var app = builder.Build();
 
