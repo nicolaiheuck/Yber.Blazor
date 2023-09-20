@@ -9,7 +9,7 @@ public static class DependencyInjectionScanner
 {
     public static void RegisterDependencies(this WebApplicationBuilder builder)
     {
-        builder.Services.AddByNamespaces(ServiceLifetime.Scoped, "Yber.Services.Interfaces", "Yber.Services.Services", "Yber.Repositories.Interfaces", "Yber.Repositories.Repositories");
+        builder.Services.AddByNamespaces(ServiceLifetime.Scoped, "Yber.Services.Interfaces", "Yber.Services.Services", "Yber.Repositories.Interfaces", "Yber.Repositories.Repositories", "Yber.Repositories.Infrastructure");
     }
 
     /// <summary>
