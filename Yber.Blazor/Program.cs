@@ -30,7 +30,7 @@ builder.Services.AddAuthorization(options =>
 	options.FallbackPolicy = options.DefaultPolicy;
 });
 
-var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
+var keyVaultEndpoint = new Uri(builder.Configuration["VaultUri"]);
 builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
 
 
