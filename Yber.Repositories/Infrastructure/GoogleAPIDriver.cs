@@ -11,8 +11,8 @@ public class GoogleAPIDriver : IGoogleAPIDriver
     private async Task<string> GetCalculatedRouteFromGoogleAsync(double[] LatLong)
     {
         DirectionsRequest request = new DirectionsRequest();
-        // request.Key = "AIzaSyD9q6OWPdId9uZhNOeRYADWyxREdQvXesg";
-        request.Key = "Azure"; // TODO AZURE KEYVAULT
+        request.Key = "AIzaSyD9q6OWPdId9uZhNOeRYADWyxREdQvXesg";
+        // request.Key = "Azure"; // TODO AZURE KEYVAULT
         
         request.Origin = new LocationEx(new CoordinateEx(LatLong[0], LatLong[1]));
         request.Destination = new LocationEx(new CoordinateEx(54.909290, 9.799820));
