@@ -1,40 +1,40 @@
 ﻿@inject DialogService DialogService
 
 <div class="top-row ps-3 navbar" style="background-color: #D7D7D7; max-height: 50px">
-    <div class="container-fluid row">
-        <div class="col-10">
-            <a href="#" aria-label="Home page">
-                <img src="/images/Über_logo.png" alt="Kantine logo" style="max-height: 42px" />
-            </a>
-        </div>
-    </div>
+	<div class="container-fluid row">
+		<div class="col-10">
+			<a href="#" aria-label="Home page">
+				<img src="/images/Über_logo.png" alt="Kantine logo" style="max-height: 42px" />
+			</a>
+		</div>
+	</div>
 </div>
 <RadzenPanelMenu Multiple="false">
 
-    <RadzenPanelMenuItem Text="Home" Path="/" Icon="home"></RadzenPanelMenuItem>
+	<RadzenPanelMenuItem Text="Home" Path="/" Icon="home"></RadzenPanelMenuItem>
 
-    @*     <AuthorizeView Roles=""> *@
-    @*         <RadzenPanelMenuItem Text="" Icon="">
-    <RadzenPanelMenuItem Text="" Icon="" Path=""></RadzenPanelMenuItem>
-    </RadzenPanelMenuItem> *@
-    @*     </AuthorizeView> *@
+	@*     <AuthorizeView Roles=""> *@
+	@*         <RadzenPanelMenuItem Text="" Icon="">
+	<RadzenPanelMenuItem Text="" Icon="" Path=""></RadzenPanelMenuItem>
+	</RadzenPanelMenuItem> *@
+	@*     </AuthorizeView> *@
 
 </RadzenPanelMenu>
 
 <div class="container" style="position: absolute; bottom: 5px;">
-    <div class="m-2">
-        <RadzenButton Size="ButtonSize.Large" ButtonStyle="ButtonStyle.Secondary" Click="@OpenSettings" Icon="settings" class="rz-border-radius-10 rz-shadow-6"></RadzenButton>
-    </div>
-    @*     <div class="m-2">
-    <LoginDisplay />
-    </div> *@
+	<div class="m-2">
+		<RadzenButton Size="ButtonSize.Large" ButtonStyle="ButtonStyle.Secondary" Click="@OpenSettings" Icon="settings" class="rz-border-radius-10 rz-shadow-6"></RadzenButton>
+	</div>
+	<div class="m-2">
+		<LoginDisplay />
+	</div>
 </div>
 
 
 @code {
-    public async Task OpenSettings()
-    {
-        var options = new SideDialogOptions { CloseDialogOnOverlayClick = true, Position = DialogPosition.Bottom, Width = "20%", ShowMask = false };
-        await DialogService.OpenSideAsync<LanguageSwitcher>("Settings", null, options);
-    }
+	public async Task OpenSettings()
+	{
+		var options = new SideDialogOptions { CloseDialogOnOverlayClick = true, Position = DialogPosition.Bottom, Width = "20%", ShowMask = false };
+		await DialogService.OpenSideAsync<LanguageSwitcher>("Settings", null, options);
+	}
 }
