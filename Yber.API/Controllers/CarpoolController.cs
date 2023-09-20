@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Yber.Repositories.Entities;
 using Yber.Services.DTO;
 using Yber.Services.Interfaces;
 

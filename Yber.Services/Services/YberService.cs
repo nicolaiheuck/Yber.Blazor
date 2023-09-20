@@ -1,4 +1,5 @@
 using System.Globalization;
+using Yber.Repositories.Entities;
 using Yber.Repositories.Interfaces;
 using Yber.Services.DTO;
 using Yber.Services.Interfaces;
@@ -17,7 +18,27 @@ public class YberService : IYberService
     }
     public async Task<List<StudentDTO>> GetStudentDriverLocationInfoAsync()
     {
-        var _students = await _YberRepository.GetDriverStudentLocationArrayListAsync();
+        return await GetStudentListInfoAsync(false);
+    }
+
+    public async Task<List<StudentDTO>> GetStudentRequesterLocationInfoAsync()
+    {
+        return await GetStudentListInfoAsync(true);
+    }
+
+    private async Task<List<StudentDTO>> GetStudentListInfoAsync(bool lift = false)
+    {
+        var _students = new List<Uber_Students>();
+        switch (lift)
+        {
+            case true:
+                _students = await _YberRepository.GetLiftStudentLocationArrayListAsync();
+                break;
+            case false:
+                _students = await _YberRepository.GetDriverStudentLocationArrayListAsync();
+                break;
+        }
+
         var result = new List<StudentDTO>();
         foreach (var student in _students)
         {
@@ -36,11 +57,6 @@ public class YberService : IYberService
         }
 
         return result;
-    }
-
-    public async Task<List<StudentDTO>> GetStudentRequesterLocationInfoAsync()
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<CalculatedRouteDTO> GetEncodedRouteLineAsync(string studentUsername)
