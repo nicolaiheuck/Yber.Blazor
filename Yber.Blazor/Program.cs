@@ -6,8 +6,33 @@ using Microsoft.AspNetCore.Localization;
 using Radzen;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 using Yber.Blazor.Extensions;
+using Azure.Identity;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add authentication and authorization for API endpoints
+builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+				.AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+
+// Add authentication and authorization for Blazor Server app
+builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+				.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+
+builder.Services.AddControllersWithViews()
+	.AddMicrosoftIdentityUI();
+
+builder.Services.AddAuthorization(options =>
+{
+	// By default, all incoming requests will be authorized according to the default policy
+	options.FallbackPolicy = options.DefaultPolicy;
+});
+
+var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
+builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
+
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -45,8 +70,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseStaticFiles();
 
