@@ -1,4 +1,8 @@
 using System.Net.Http.Json;
+using GoogleApi.Entities.Common;
+using GoogleApi.Entities.Maps.Common;
+using GoogleApi.Entities.Maps.Directions.Request;
+using GoogleApi.Entities.Maps.Directions.Response;
 using Yber.Repositories.Entities;
 using Yber.Repositories.Interfaces;
 
@@ -6,28 +10,23 @@ namespace Yber.Repositories.Infrastructure;
 
 public class GoogleAPIDriver : IGoogleAPIDriver
 {
-    private async Task<CalculatedRoute> GetCalculatedRouteFromGoogleAsync(double[] LatLong)
+    private async Task<string> GetCalculatedRouteFromGoogleAsync(double[] LatLong)
     {
-        var _origin = new Origin();
-        _origin.location.latLng.longitude = LatLong[0];
-        _origin.location.latLng.latitude = LatLong[1];
+        DirectionsRequest request = new DirectionsRequest();
+        request.Key = "AIzaSyD9q6OWPdId9uZhNOeRYADWyxREdQvXesg";
 
-        var _googleRequest = new GoogleRouteRequest();
-        _googleRequest.origin = _origin;
+        request.Origin = new LocationEx(new CoordinateEx(LatLong[0], LatLong[1]));
+        request.Destination = new LocationEx(new CoordinateEx(54.909290, 9.799820));
 
-        var _httpClient = new HttpClient();
-        var _baseUrl = new Uri("https://routes.googleapis.com/directions/v2:computeRoutes");
-        _httpClient.DefaultRequestHeaders.Add("X-Goog-Api-Key", "AIzaSyD9q6OWPdId9uZhNOeRYADWyxREdQvXesg");
-        _httpClient.DefaultRequestHeaders.Add("X-Goog-FieldMask", "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline");
+        var response = await GoogleApi.GoogleMaps.Directions.QueryAsync(request);
         
-        var _googleResponse = await _httpClient.PostAsJsonAsync(_baseUrl, _googleRequest);
-        
-        return await _googleResponse.Content.ReadFromJsonAsync<CalculatedRoute>();
+        return response.Routes.First().OverviewPath.Points;
     }
         
     public async Task<Polyline> GetPolylineAsync(double[] LatLong)
     {
-        var responseFromGoogle = await GetCalculatedRouteFromGoogleAsync(LatLong);
-        return responseFromGoogle.Polyline;
+        var polyline = new Polyline();
+        polyline.EncodedPolyline = await GetCalculatedRouteFromGoogleAsync(LatLong);
+        return polyline;
     }
 }

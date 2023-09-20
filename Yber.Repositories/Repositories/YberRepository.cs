@@ -1,5 +1,7 @@
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Yber.Repositories.DBContext;
+using Yber.Repositories.Entities;
 using Yber.Repositories.Interfaces;
 
 namespace Yber.Repositories.Repositories;
@@ -13,31 +15,53 @@ public class YberRepository : IYberRepository
         _context = yberContext;
     }
 
-    private async Task<List<double[]>> GetStudentLocationsFromDatabseAsync(bool needLift = false)
+    private async Task<List<Uber_Students>> GetStudentLocationsFromDatabseAsync(bool needLift = false)
     {
-        var _studentsNeedLift = await _context.Uber_Stutents.Where(s => s.Lift_Take == needLift)
-            .Include(s => s.City).ToListAsync();
+        var _students = new List<Uber_Students>();
 
-        var _locationArray = new List<double[]>();
-        foreach (var student in _studentsNeedLift)
+        if (needLift)
         {
-            double _long = 0;
-            double _lat = 0;
-            Double.TryParse(student.Longitude, out _long);
-            Double.TryParse(student.Lattitude, out _lat);
-            _locationArray.Add(new []{_lat, _long});
+            _students = await _context.Uber_Students
+                .Where(s => s.Lift_Take == true)
+                .Include(s => s.City)
+                .AsNoTracking()
+                .ToListAsync();
         }
-
-        return _locationArray;
+        
+        if (!needLift)
+        {
+            _students = await _context.Uber_Students
+                .Where(s => s.Lift_Give == true)
+                .Include(s => s.City)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+        
+        return _students;
     }
     
-    public async Task<List<double[]>> GetLiftStudentLocationArrayListAsync()
+    public async Task<List<Uber_Students>> GetLiftStudentLocationArrayListAsync()
     {
         return await GetStudentLocationsFromDatabseAsync(true);
     }
 
-    public async Task<List<double[]>> GetDriverStudentLocationArrayListAsync()
+    public async Task<List<Uber_Students>> GetDriverStudentLocationArrayListAsync()
     {
         return await GetStudentLocationsFromDatabseAsync();
+    }
+
+    public async Task<double[]> GetStudentLatLangAsync(string studentUserName)
+    {
+        var _student = await _context.Uber_Students
+            .Where(s => s.Username == studentUserName)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+        double _long;
+        double _lat;
+        Double.TryParse(_student.Longitude, CultureInfo.InvariantCulture, out _long);
+        Double.TryParse(_student.Lattitude, CultureInfo.InvariantCulture, out _lat);
+        
+        var _location = new [] { _lat, _long };
+        return _location;
     }
 }

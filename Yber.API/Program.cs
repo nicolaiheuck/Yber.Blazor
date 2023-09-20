@@ -1,7 +1,9 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Models;
 using Yber.API.Extensions;
+using Yber.Repositories.DBContext;
+using Yber.Services.Interfaces;
+using Yber.Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerWithOAuth();
+builder.RegisterDependencies();
+builder.Services.AddDbContext<YberContext>();
+// builder.Services.AddScoped<IYberService, YberService>();
 
 // Authentication pipeline config - START
 builder.Services.AddAuthentication(options =>
