@@ -6,7 +6,7 @@ using Yber.Services.Interfaces;
 namespace Yber.API.Controllers;
 
 [ApiController]
-[Authorize]
+// [Authorize] // TODO BUGFIX AZURE KEYVAULT
 [Route("[controller]/[action]")]
 public class CarpoolController : ControllerBase
 {
