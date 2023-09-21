@@ -60,16 +60,15 @@ async function initMap(listOfLocations, currentLocation, encodedPolyline) {
     // Use listOfLocations 
     
     function addMarkers(latLngArray) {
-        const pinColorNeedLift = new PinElement({
-            background: "#00FF00",
-        });
         
         for (i = 0; i < latLngArray.length; i++) {
 
             var marker = new AdvancedMarkerElement({
                 map: map,
                 position: latLngArray[i],
-                content: pinColor.element
+                content: new PinElement({
+                    background: "#00FF00",
+                }).element
             })
         }
     }
