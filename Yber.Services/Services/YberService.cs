@@ -3,6 +3,7 @@ using Yber.Repositories.Entities;
 using Yber.Repositories.Interfaces;
 using Yber.Services.DTO;
 using Yber.Services.Interfaces;
+using RequestDTO = Yber.Services.DTO.RequestDTO;
 
 namespace Yber.Services.Services;
 
@@ -65,5 +66,57 @@ public class YberService : IYberService
         var _polyline = await _GoogleAPIRepo.GetPolylineAsync(_latlng);
         
         return new CalculatedRouteDTO { EncodedPolyline = _polyline.EncodedPolyline };
+    }
+
+    public async Task<int> RequestLiftFromUser(string requesterUsername, string requesteeUsername)
+    {
+        var requester = await _YberRepository.GetStudentFromName(requesterUsername);
+        var requestee = await _YberRepository.GetStudentFromName(requesteeUsername);
+        if ((requestee.Username == null) || (requester.Username == null)) return 0;
+
+        await _YberRepository.RequestLift(requestee, requester);
+        return 1;
+    }
+
+    public async Task<int> ApproveLiftRequest(string requesterUsername, string requesteeUsername)
+    {
+        var requester = await _YberRepository.GetStudentFromName(requesterUsername);
+        var requestee = await _YberRepository.GetStudentFromName(requesteeUsername);
+        if ((requestee.Username == null) || (requester.Username == null)) return 0;
+        await _YberRepository.ApproveLift(requester, requestee);
+        return 1;
+    }
+
+    public async Task<StudentDTO> GetStudentFromIdAsync(int studentID)
+    {
+        Uber_Students student = await _YberRepository.GetStudentFromIdAsync(studentID);
+        
+        return student == null ? new StudentDTO() : new StudentDTO
+        {
+            Id = student.ID,
+            First_Name = student.Name_First!,
+            Username = student.Username,
+            Lift_Give = student.Lift_Give,
+            Lift_Take = student.Lift_Take
+        };
+    }
+
+    public async Task<List<RequestDTO>> GetLiftRequests(string requesteeUsername)
+    {
+        var student = await _YberRepository.GetStudentFromName(requesteeUsername);
+        var requests = await _YberRepository.FetchActiveRequests(student);
+        var requestDTO = new List<RequestDTO>();
+        
+        foreach (var req in requests.Requests)
+        {
+            requestDTO.Add(new RequestDTO
+            {
+                RequesteeID = (int)req.RequesteeID!,
+                RequesterID = (int)req.RequesterID!,
+                RequestApproved = (bool)req.RequestApproved!
+            });
+        }
+
+        return requestDTO;
     }
 }

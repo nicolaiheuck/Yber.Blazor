@@ -95,8 +95,8 @@ public static class DependencyInjectionScanner
     {
         List<Assembly> assemblies = new()
         {
-            typeof(IExampleService).Assembly,
-            typeof(IExampleRepository).Assembly,
+            typeof(IYberService).Assembly,
+            typeof(IYberRepository).Assembly
         };
 
         return assemblies.SelectMany(a => a.GetTypes())
