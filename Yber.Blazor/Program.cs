@@ -1,3 +1,4 @@
+using System.Net;
 using Blazored.Modal;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Components;
@@ -39,6 +40,7 @@ builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredent
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddDbContext<YberContext>();
+builder.Services.AddHttpClient();
 
 // configure cultures
 builder.Services.Configure<RequestLocalizationOptions>(options =>
