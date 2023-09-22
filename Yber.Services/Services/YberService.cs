@@ -1,9 +1,10 @@
 using System.Globalization;
-using Yber.Repositories.DBContext;
 using Yber.Repositories.Entities;
 using Yber.Repositories.Interfaces;
 using Yber.Services.DTO;
 using Yber.Services.Interfaces;
+using RequestDTO = Yber.Services.DTO.RequestDTO;
+
 namespace Yber.Services.Services;
 
 public class YberService : IYberService
@@ -72,7 +73,8 @@ public class YberService : IYberService
         var requester = await _YberRepository.GetStudentFromName(requesterUsername);
         var requestee = await _YberRepository.GetStudentFromName(requesteeUsername);
         if ((requestee.Username == null) || (requester.Username == null)) return 0;
-        await _YberRepository.RequestLift(requester, requestee);
+
+        await _YberRepository.RequestLift(requestee, requester);
         return 1;
     }
 
@@ -85,13 +87,27 @@ public class YberService : IYberService
         return 1;
     }
 
+    public async Task<StudentDTO> GetStudentFromIdAsync(int studentID)
+    {
+        Uber_Students student = await _YberRepository.GetStudentFromIdAsync(studentID);
+        
+        return student == null ? new StudentDTO() : new StudentDTO
+        {
+            Id = student.ID,
+            First_Name = student.Name_First!,
+            Username = student.Username,
+            Lift_Give = student.Lift_Give,
+            Lift_Take = student.Lift_Take
+        };
+    }
+
     public async Task<List<RequestDTO>> GetLiftRequests(string requesteeUsername)
     {
         var student = await _YberRepository.GetStudentFromName(requesteeUsername);
         var requests = await _YberRepository.FetchActiveRequests(student);
         var requestDTO = new List<RequestDTO>();
         
-        foreach (var req in requests)
+        foreach (var req in requests.Requests)
         {
             requestDTO.Add(new RequestDTO
             {

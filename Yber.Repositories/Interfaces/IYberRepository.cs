@@ -10,5 +10,6 @@ public interface IYberRepository
     public Task<Uber_Students> GetStudentFromName(string studentUserName);
     public Task RequestLift(Uber_Students requester, Uber_Students requestee);
     public Task ApproveLift(Uber_Students requester, Uber_Students requestee);
-    public Task<List<Uber_Requests>> FetchActiveRequests(Uber_Students user);
+    public Task<Uber_Students> FetchActiveRequests(Uber_Students user);
+    public Task<Uber_Students> GetStudentFromIdAsync(int studentID);
 }

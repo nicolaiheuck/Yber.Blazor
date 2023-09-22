@@ -69,36 +69,52 @@ public class YberRepository : IYberRepository
     {
         var foundStudent = await _context.Uber_Students
             .Where(s => s.Username == studentUserName)
+            .AsNoTracking()
             .FirstOrDefaultAsync();
         return foundStudent ?? new Uber_Students();
     }
 
     public async Task RequestLift(Uber_Students requester, Uber_Students requestee)
     {
-        _context.Uber_Requests.Add(new Uber_Requests
+        var request = new Uber_Requests
         {
             RequestApproved = false,
-            Requestee = requestee,
-            Requester = requester
-        });
+            RequesteeID = requestee.ID,
+            RequesterID = requester.ID,
+            Requester = null,
+            Requestee = null
+        };
+
+        _context.Uber_Requests.Add(request);
         await _context.SaveChangesAsync();
     }
 
     public async Task ApproveLift(Uber_Students requester, Uber_Students requestee)
     {
         var uberRequest = await _context.Uber_Requests
-            .Where(r => r.RequesterID == requester.Id && r.RequesteeID == requestee.Id)
+            .Where(r => r.RequesterID == requester.ID && r.RequesteeID == requestee.ID)
             .FirstOrDefaultAsync();
         uberRequest.RequestApproved = true;
         _context.Uber_Requests.Update(uberRequest);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<Uber_Requests>> FetchActiveRequests(Uber_Students user)
+    public async Task<Uber_Students> GetStudentFromIdAsync(int studentID)
     {
-        var foundRequests = await _context.Uber_Requests
-            .Where(r => r.Requester == user)
-            .ToListAsync();
+        var student = await _context.Uber_Students
+            .Where(s => s.ID == studentID)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+        return student;
+    }
+
+    public async Task<Uber_Students> FetchActiveRequests(Uber_Students user)
+    {
+        var foundRequests = await _context.Uber_Students
+            .Where(r => r == user)
+            .Include(s => s.Requests)
+            .FirstOrDefaultAsync();
         return foundRequests;
     }
 }

@@ -1,4 +1,5 @@
 using System.Net;
+using AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Yber.Services.DTO;
 using Yber.Services.Interfaces;
@@ -51,5 +52,12 @@ public class CarpoolController : ControllerBase
     {
         var requests = await service.GetLiftRequests(studentName);
         return requests;
+    }
+
+    [HttpPost("/GetStudentsFromID")]
+    public async Task<StudentDTO> GetStudentsFromID([FromServices] IYberService service, int studentID)
+    {
+        var student = await service.GetStudentFromIdAsync(studentID);
+        return student;
     }
 }
