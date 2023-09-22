@@ -1,12 +1,10 @@
 using System.Text.Json;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Graph;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using Toolbelt.Blazor.HotKeys2;
 using Yber.Services.DTO;
-using Yber.Services.Interfaces;
-using static Microsoft.JSInterop.IJSRuntime;
 
 namespace Yber.Blazor.Pages;
 
@@ -15,65 +13,83 @@ public partial class Index : IDisposable
     [Inject] public IToastService? ToastService { get; set; }
     [Inject] public HotKeys HotKeys { get; set; }
     [Inject] public Toolbelt.Blazor.I18nText.I18nText I18nText { get; set; }
-    [Inject] public IYberService YberService { get; set; }
     [Inject] public IJSRuntime JsRuntime { get; set; }
+    [Inject] public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    [Inject] public IConfiguration AppSettings { get; set; }
     private HotKeysContext? _hotKeysContext;
     private I18nText.LanguageTable _languageTable = new ();
     private IJSRuntime? _jsRuntime;
-    private IYberService _yberService;
-    public string StudentLocationJson { get; set; }
-    public string ActualStucentLocationJson { get; set; }
-    public CalculatedRouteDTO CalculatedRoute { get; set; }
-    private string UserName { get; set; }
+    private HttpClient _httpClient;
+    private AuthenticationStateProvider _authentication;
+    private AuthenticationState _authenticationState;
+    private string _StudentLocationJson { get; set; }
+    private string _ActualStucentLocationJson { get; set; }
+    private CalculatedRouteDTO _CalculatedRoute { get; set; }
+    private string _UserName { get; set; }
+    private string _FirstName { get; set; }
+    
+    private List<StudentDTO> _students { get; set; }
+    private StudentDTO _actualStudent { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        await GetUserInfoFromAPI();
         _languageTable = await I18nText.GetTextTableAsync<I18nText.LanguageTable>(this);
-        _hotKeysContext = HotKeys.CreateContext()
-            .Add(Code.F8, Toaster);
     }
 
+    // ReSharper disable once InconsistentNaming
+    private async Task GetUserInfoFromAPI()
+    {
+        _authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        _httpClient = new HttpClient();
+        
+        if (_authenticationState.User.Identity == null) return;
+        _UserName = _authenticationState.User.Identity.Name;
+        
+        _students = await _httpClient.GetFromJsonAsync<List<StudentDTO>>(
+            $"{AppSettings["YberAPIBaseURI"]}GetStudentLift");
+        _actualStudent = _students.Find(s => s.Username == _UserName);
+
+        _FirstName = _actualStudent == null ? "Null" : _actualStudent.First_Name;
+    }
+
+    // ReSharper disable once InconsistentNaming
     private async Task GetInfoFromAPIAsync()
     {
+        _CalculatedRoute = (await (await _httpClient.PostAsync
+        ($"{AppSettings["YberAPIBaseURI"]}GetStudentRoute?studentName={_UserName}",null))
+            .Content.ReadFromJsonAsync<CalculatedRouteDTO>())!;
         
-        // TODO USE API DIPSHIT
-        UserName = "elvn4";
-        var students = await _yberService.GetStudentRequesterLocationInfoAsync();
-        var actualStudent = students.Find(s => s.Username == UserName);
-        CalculatedRoute = await _yberService.GetEncodedRouteLineAsync(UserName); // TODO FIX USERNAME FROM AZURE
         var studentsCoordinates = new List<StudentCoordinateDTO>();
-        foreach (var student in students)
+        
+        foreach (var student in _students)
         {
-            studentsCoordinates.Add(new StudentCoordinateDTO()
+            studentsCoordinates.Add(new StudentCoordinateDTO
             {
                 lat = student.LatLng[0],
                 lng = student.LatLng[1]
             });
         }
 
-        var studentCoord = new StudentCoordinateDTO()
+        var studentCoord = new StudentCoordinateDTO
         {
-            lat = actualStudent.LatLng[0],
-            lng = actualStudent.LatLng[1]
+            lat = _actualStudent.LatLng[0],
+            lng = _actualStudent.LatLng[1]
         };
         
-        StudentLocationJson = JsonSerializer.Serialize(studentsCoordinates);
-        ActualStucentLocationJson = JsonSerializer.Serialize(studentCoord);
+        _StudentLocationJson = JsonSerializer.Serialize(studentsCoordinates);
+        _ActualStucentLocationJson = JsonSerializer.Serialize(studentCoord);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            
             _jsRuntime = JsRuntime;
-            _yberService = YberService;
             await GetInfoFromAPIAsync();
-            await _jsRuntime.InvokeVoidAsync("initMap", StudentLocationJson, ActualStucentLocationJson, CalculatedRoute.EncodedPolyline);
-    
+            await _jsRuntime.InvokeVoidAsync("initMap", _StudentLocationJson, _ActualStucentLocationJson, _CalculatedRoute.EncodedPolyline);
         }
     }
-    void Toaster() => ToastService.ShowInfo("Congratulations, you just pressed hotkey: F8");
 
     public void Dispose()
     {

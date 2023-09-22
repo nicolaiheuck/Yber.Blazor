@@ -2,7 +2,7 @@ namespace Yber.Repositories.Entities
 {
     public class Uber_Students 
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
         public string? Name_First { get; set; }
         public string? Name_Last { get; set; }
         public string? Street_Name { get; set; }
