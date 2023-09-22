@@ -64,4 +64,41 @@ public class YberRepository : IYberRepository
         var _location = new [] { _lat, _long };
         return _location;
     }
+
+    public async Task<Uber_Students> GetStudentFromName(string studentUserName)
+    {
+        var foundStudent = await _context.Uber_Students
+            .Where(s => s.Username == studentUserName)
+            .FirstOrDefaultAsync();
+        return foundStudent ?? new Uber_Students();
+    }
+
+    public async Task RequestLift(Uber_Students requester, Uber_Students requestee)
+    {
+        _context.Uber_Requests.Add(new Uber_Requests
+        {
+            RequestApproved = false,
+            Requestee = requestee,
+            Requester = requester
+        });
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task ApproveLift(Uber_Students requester, Uber_Students requestee)
+    {
+        var uberRequest = await _context.Uber_Requests
+            .Where(r => r.RequesterID == requester.Id && r.RequesteeID == requestee.Id)
+            .FirstOrDefaultAsync();
+        uberRequest.RequestApproved = true;
+        _context.Uber_Requests.Update(uberRequest);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<Uber_Requests>> FetchActiveRequests(Uber_Students user)
+    {
+        var foundRequests = await _context.Uber_Requests
+            .Where(r => r.Requester == user)
+            .ToListAsync();
+        return foundRequests;
+    }
 }

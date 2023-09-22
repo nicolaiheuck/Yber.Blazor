@@ -1,9 +1,9 @@
 using System.Globalization;
+using Yber.Repositories.DBContext;
 using Yber.Repositories.Entities;
 using Yber.Repositories.Interfaces;
 using Yber.Services.DTO;
 using Yber.Services.Interfaces;
-
 namespace Yber.Services.Services;
 
 public class YberService : IYberService
@@ -65,5 +65,42 @@ public class YberService : IYberService
         var _polyline = await _GoogleAPIRepo.GetPolylineAsync(_latlng);
         
         return new CalculatedRouteDTO { EncodedPolyline = _polyline.EncodedPolyline };
+    }
+
+    public async Task<int> RequestLiftFromUser(string requesterUsername, string requesteeUsername)
+    {
+        var requester = await _YberRepository.GetStudentFromName(requesterUsername);
+        var requestee = await _YberRepository.GetStudentFromName(requesteeUsername);
+        if ((requestee.Username == null) || (requester.Username == null)) return 0;
+        await _YberRepository.RequestLift(requester, requestee);
+        return 1;
+    }
+
+    public async Task<int> ApproveLiftRequest(string requesterUsername, string requesteeUsername)
+    {
+        var requester = await _YberRepository.GetStudentFromName(requesterUsername);
+        var requestee = await _YberRepository.GetStudentFromName(requesteeUsername);
+        if ((requestee.Username == null) || (requester.Username == null)) return 0;
+        await _YberRepository.ApproveLift(requester, requestee);
+        return 1;
+    }
+
+    public async Task<List<RequestDTO>> GetLiftRequests(string requesteeUsername)
+    {
+        var student = await _YberRepository.GetStudentFromName(requesteeUsername);
+        var requests = await _YberRepository.FetchActiveRequests(student);
+        var requestDTO = new List<RequestDTO>();
+        
+        foreach (var req in requests)
+        {
+            requestDTO.Add(new RequestDTO
+            {
+                RequesteeID = (int)req.RequesteeID!,
+                RequesterID = (int)req.RequesterID!,
+                RequestApproved = (bool)req.RequestApproved!
+            });
+        }
+
+        return requestDTO;
     }
 }
