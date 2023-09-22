@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Yber.Services.DTO;
 using Yber.Services.Interfaces;
@@ -6,7 +5,6 @@ using Yber.Services.Interfaces;
 namespace Yber.API.Controllers;
 
 [ApiController]
-// [Authorize] // TODO BUGFIX AZURE KEYVAULT
 [Route("[controller]/[action]")]
 public class CarpoolController : ControllerBase
 {
