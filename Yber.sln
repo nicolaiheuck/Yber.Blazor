@@ -5,11 +5,11 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Yber.Blazor", "Yber.Blazor\Yber.Blazor.csproj", "{CBC72092-9868-4549-82BD-D49DB9B58015}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yber.Services", "Yber.Services\Yber.Services.csproj", "{7DAC17E8-D544-47AF-9A65-2401A12A2399}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Yber.Services", "Yber.Services\Yber.Services.csproj", "{7DAC17E8-D544-47AF-9A65-2401A12A2399}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yber.Repositories", "Yber.Repositories\Yber.Repositories.csproj", "{6649E3C4-2E04-4430-9BE5-7E840772E4ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Yber.Repositories", "Yber.Repositories\Yber.Repositories.csproj", "{6649E3C4-2E04-4430-9BE5-7E840772E4ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yber.API", "Yber.API\Yber.API.csproj", "{0E1A57E5-DAD2-4A6A-9A17-56FF0E3084CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Yber.API", "Yber.API\Yber.API.csproj", "{0E1A57E5-DAD2-4A6A-9A17-56FF0E3084CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,8 +31,13 @@ Global
 		{6649E3C4-2E04-4430-9BE5-7E840772E4ED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0E1A57E5-DAD2-4A6A-9A17-56FF0E3084CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0E1A57E5-DAD2-4A6A-9A17-56FF0E3084CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E1A57E5-DAD2-4A6A-9A17-56FF0E3084CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E1A57E5-DAD2-4A6A-9A17-56FF0E3084CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {777F05D5-F97C-419A-87E7-EF6598C014A0}
 	EndGlobalSection
 EndGlobal
