@@ -66,29 +66,61 @@ public class CarpoolController : ControllerBase
     public async Task<HttpStatusCode> RequestLiftFromStudent([FromServices] IYberService service, string RequesterUserName,
         string RequesteeUserName)
     {
-        var result = await service.RequestLiftFromUser(RequesterUserName, RequesteeUserName);
-        return result == 0 ? HttpStatusCode.BadRequest : HttpStatusCode.OK;
+        try
+        {
+            var result = await service.RequestLiftFromUser(RequesterUserName, RequesteeUserName);
+            return result == 0 ? HttpStatusCode.BadRequest : HttpStatusCode.OK;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "RequestLiftFromStudent failed");
+            throw;
+        }
     }
 
     [HttpPost("/AcceptLift")]
     public async Task<HttpStatusCode> ApproveLiftFromUser([FromServices] IYberService service, string RequesterUserName,
         string RequesteeUserName)
     {
-        var result = await service.ApproveLiftRequest(RequesterUserName, RequesteeUserName);
-        return result == 0 ? HttpStatusCode.BadRequest : HttpStatusCode.OK;
+        try
+        {
+            var result = await service.ApproveLiftRequest(RequesterUserName, RequesteeUserName);
+            return result == 0 ? HttpStatusCode.BadRequest : HttpStatusCode.OK;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "ApproveLiftFromUser failed");
+            throw;
+        }
     }
 
     [HttpPost("/ViewLifts")]
     public async Task<List<RequestDTO>> GetActiveRequests([FromServices] IYberService service, string studentName)
     {
-        var requests = await service.GetLiftRequests(studentName);
-        return requests;
+        try
+        {
+            var requests = await service.GetLiftRequests(studentName);
+            return requests;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "GetActiveRequests failed");
+            throw;
+        }
     }
 
     [HttpPost("/GetStudentsFromID")]
     public async Task<StudentDTO> GetStudentsFromID([FromServices] IYberService service, int studentID)
     {
-        var student = await service.GetStudentFromIdAsync(studentID);
-        return student;
+        try
+        {
+            var student = await service.GetStudentFromIdAsync(studentID);
+            return student;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "GetStudentsFromID failed");
+            throw;
+        }
     }
 }
