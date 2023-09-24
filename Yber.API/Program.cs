@@ -12,6 +12,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerWithOAuth();
 builder.RegisterDependencies();
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.AddSeq(builder.Configuration.GetSection("Seq"));
+});
 builder.Services.AddDbContext<YberContext>();
 // builder.Services.AddScoped<IYberService, YberService>();
 

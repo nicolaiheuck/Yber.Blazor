@@ -57,6 +57,10 @@ builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<ContextMenuService>();
 builder.RegisterDependencies();
+builder.Services.AddLogging(loggingBuilder =>
+{
+	loggingBuilder.AddSeq(builder.Configuration.GetSection("Seq"));
+});
 
 var app = builder.Build();
 
