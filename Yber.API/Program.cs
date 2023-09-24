@@ -23,6 +23,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.RegisterDependencies();
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.AddSeq(builder.Configuration.GetSection("Seq"));
+});
 builder.Services.AddDbContext<YberContext>();
 
 var app = builder.Build();
