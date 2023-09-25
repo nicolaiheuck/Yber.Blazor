@@ -17,6 +17,9 @@ public partial class Index : IDisposable
     [Inject] public IJSRuntime JsRuntime { get; set; }
     [Inject] public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     [Inject] public IConfiguration AppSettings { get; set; }
+
+    [Inject] public HttpClient MyHttpClient { get; set; }
+    
     private HotKeysContext? _hotKeysContext;
     private I18nText.LanguageTable _languageTable = new ();
     private IJSRuntime? _jsRuntime;
@@ -42,7 +45,9 @@ public partial class Index : IDisposable
     private async Task GetUserInfoFromAPI()
     {
         _authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        _httpClient = new HttpClient();
+        
+        // TODO SSL ERRORS
+        _httpClient = MyHttpClient;
         
         if (_authenticationState.User.Identity == null) return;
         _UserName = _authenticationState.User.Identity.Name;
