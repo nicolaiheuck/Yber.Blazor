@@ -2,6 +2,7 @@ namespace Yber.Services.DTO;
 
 public class StudentDTO
 {
+    public int Id { get; set; }
     public string First_Name { get; set; }
     public double[] LatLng { get; set; }
     public bool? Lift_Take { get; set; }

@@ -5,6 +5,8 @@
 	"Name": "Name",
 	"Description": "Description",
 	"Equality": "Equality",
+	"Yes": "Yes",
+	"No": "No",
 
 	//Global - Toast Messages
 	"SuccessfullyUpdated": "Successfully updated",
@@ -13,6 +15,10 @@
 	"FailedDelete": "Failed to delete",
 	"SuccessfullyCreated": "Successfully created",
 	"FailedCreate": "Failed to create",
+
+	//Global - Modal
+	"DeleteConfirmation": "Are you sure you want to delete",
+	"NotInDB": "You are currently not registert with us. please conatact a Administartor or write to us on: YberContact@peterhymoellerhotmail.onmicrosoft.com",
 
 	//Index
 	"HelloWorld": "Hello!"

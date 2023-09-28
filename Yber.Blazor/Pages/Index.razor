@@ -1,29 +1,73 @@
 ﻿@page "/"
 @implements IDisposable
-@inject HotKeys HotKeys
-@inject IToastService ToastService
-@inject Toolbelt.Blazor.I18nText.I18nText I18nText
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize(Roles = "Admin, Elev")]
+@using Yber.Services.DTO
 
 
 <PageTitle>Home</PageTitle>
 
 <div class="text-center">
-    <h1>@languageTable["HelloWorld"]</h1>
+	<h3>Welcome @_FirstName to ÜBER</h3>
 </div>
+<div id="map"></div>
 
-@code {
-    HotKeysContext HotKeysContext;
-    I18nText.LanguageTable languageTable = new I18nText.LanguageTable();
+@if (_actualStudent is not null)
+{
+	@if (_actualStudent.Lift_Take == true)
+	{
+		<div class="text-center">
+			<RadzenDataGrid @ref="_LiftGiverGrid"
+							TItem="StudentDTO"
+							AllowPaging="true"
+							PageSize="10"
+							AllowColumnResize="true"
+							SelectionMode="DataGridSelectionMode.Single"
+							PagerHorizontalAlign="HorizontalAlign.Center"
+							Data="@_driverStudents">
 
-    protected override async Task OnInitializedAsync()
-    {
-        languageTable = await I18nText.GetTextTableAsync<I18nText.LanguageTable>(this);
-        this.HotKeysContext = this.HotKeys.CreateContext()
-            .Add(Code.F8, Toaster);
-    }
+				<Columns>
+					<RadzenDataGridColumn TItem="StudentDTO" Property="First_Name" Title="Name"></RadzenDataGridColumn>
+					<RadzenDataGridColumn TItem="StudentDTO" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
+						<Template>
+							<RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="done" Size="ButtonSize.Small" Class="m-1" Click="@(args =>  Accept())" />
+						</Template>
+					</RadzenDataGridColumn>
+					<RadzenDataGridColumn TItem="StudentDTO" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
+						<Template>
+							<RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Class="m-1" Click="@(args =>  Reject())" />
+						</Template>
+					</RadzenDataGridColumn>
+				</Columns>
+			</RadzenDataGrid>
+		</div>
+	}
 
-    void Toaster() => ToastService.ShowInfo("Congratulations, you just pressed hotkey: F8");
+	@if (_actualStudent.Lift_Give == true)
+	{
+		<div class="text-center">
+			<RadzenDataGrid @ref="_LiftTakerGrid"
+							TItem="StudentDTO"
+							AllowPaging="true"
+							PageSize="10"
+							AllowColumnResize="true"
+							SelectionMode="DataGridSelectionMode.Single"
+							PagerHorizontalAlign="HorizontalAlign.Center"
+							Data="@_liftStudents">
 
-    public void Dispose() => this.HotKeysContext.Dispose();
+				<Columns>
+					<RadzenDataGridColumn TItem="StudentDTO" Property="First_Name" Title="Name"></RadzenDataGridColumn>
+					<RadzenDataGridColumn TItem="StudentDTO" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
+						<Template>
+							<RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="done" Size="ButtonSize.Small" Class="m-1" Click="@(args =>  Accept())" />
+						</Template>
+					</RadzenDataGridColumn>
+					<RadzenDataGridColumn TItem="StudentDTO" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
+						<Template>
+							<RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Class="m-1" Click="@(args =>  Reject())" />
+						</Template>
+					</RadzenDataGridColumn>
+				</Columns>
+			</RadzenDataGrid>
+		</div>
+	}
 }

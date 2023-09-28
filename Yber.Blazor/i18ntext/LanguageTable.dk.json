@@ -5,6 +5,8 @@
 	"Name": "Navn",
 	"Description": "Beskrivelse",
 	"Equality": "Lighed",
+	"Yes": "Ja",
+	"No": "Nej",
 
 	//Global - Toast Messages
 	"SuccessfullyUpdated": "Opdatering gennemført",
@@ -13,6 +15,10 @@
 	"FailedDelete": "Kunne ikke slette",
 	"SuccessfullyCreated": "Succesfuldt oprettet",
 	"FailedCreate": "Kunne ikke oprette",
+
+	//Global - Modal
+	"DeleteConfirmation": "Er du sikker på du vil slette",
+	"NotInDB": "Du er i øjeblikket ikke registreret hos os. kontakt venligst en administrator eller skriv til os på: YberContact@peterhymoellerhotmail.onmicrosoft.com",
 
 	//Index
 	"HelloWorld": "Hej!"
