@@ -1,11 +1,15 @@
 using System.Net;
 using System.Text.Json;
+using Blazored.Modal;
+using Blazored.Modal.Services;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.JSInterop;
+using Radzen.Blazor;
 using Toolbelt.Blazor.HotKeys2;
+using Yber.Blazor.Shared.Modal;
 using Yber.Services.DTO;
 
 namespace Yber.Blazor.Pages;
@@ -18,6 +22,7 @@ public partial class Index : IDisposable
     [Inject] public IJSRuntime JsRuntime { get; set; }
     [Inject] public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     [Inject] public IConfiguration AppSettings { get; set; }
+    [Inject] public IModalService Modal { get; set; } = default!;
 
     [Inject] public HttpClient MyHttpClient { get; set; }
     
@@ -36,8 +41,11 @@ public partial class Index : IDisposable
     private List<StudentDTO> _liftStudents { get; set; }
     private List<StudentDTO> _driverStudents { get; set; }
     private StudentDTO _actualStudent { get; set; }
+	private RadzenDataGrid<StudentDTO>? _LiftTakerGrid;
+	private RadzenDataGrid<StudentDTO>? _LiftGiverGrid;
+	private StudentDTO _selectedStudent { get; set; }
 
-    protected override async Task OnInitializedAsync()
+	protected override async Task OnInitializedAsync()
     {
         await GetUserInfoFromAPI();
         _languageTable = await I18nText.GetTextTableAsync<I18nText.LanguageTable>(this);
@@ -48,10 +56,11 @@ public partial class Index : IDisposable
     {
         _authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         _httpClient = MyHttpClient;
-        
+
         if (_authenticationState.User.Identity == null) return;
         _UserName = _authenticationState.User.Identity.Name;
-        
+
+             
         _liftStudents = await _httpClient.GetFromJsonAsync<List<StudentDTO>>(
             $"{AppSettings["YberAPIBaseURI"]}GetStudentLift");
         _driverStudents = await _httpClient.GetFromJsonAsync<List<StudentDTO>>(
@@ -59,6 +68,7 @@ public partial class Index : IDisposable
         _actualStudent = _liftStudents.FirstOrDefault(s => s.Username == _UserName) ?? _driverStudents.FirstOrDefault(s => s.Username == _UserName);
 
         _FirstName = _actualStudent == null ? "" : _actualStudent.First_Name;
+
     }
 
     // ReSharper disable once InconsistentNaming
@@ -76,14 +86,27 @@ public partial class Index : IDisposable
         };
         
         var studentsCoordinates = new List<StudentCoordinateDTO>();
-        
-        foreach (var student in _liftStudents)
+        if (_actualStudent.Lift_Give == true)
         {
-            studentsCoordinates.Add(new StudentCoordinateDTO
+            foreach (var student in _liftStudents)
             {
-                lat = student.LatLng[0],
-                lng = student.LatLng[1]
-            });
+                studentsCoordinates.Add(new StudentCoordinateDTO
+                {
+                    lat = student.LatLng[0],
+                    lng = student.LatLng[1]
+                });
+            }
+        }
+        if (_actualStudent.Lift_Take == true)
+        {
+            foreach (var student in _driverStudents)
+            {
+                studentsCoordinates.Add(new StudentCoordinateDTO
+                {
+                    lat = student.LatLng[0],
+                    lng = student.LatLng[1]
+                });
+            }
         }
 
         var studentCoord = new StudentCoordinateDTO
@@ -102,13 +125,54 @@ public partial class Index : IDisposable
     {
         if (firstRender)
         {
+            _authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+            _UserName = _authenticationState.User.Identity.Name;
+            if (_UserName == null)
+            {
+                var parametersNotInDb = new ModalParameters().Add(nameof(InfoMessage.Message), $"Hello");
+                var optionsNotInDb = new ModalOptions { UseCustomLayout = true };
+                var messageFormNotInDb = Modal.Show<InfoMessage>("Info", parametersNotInDb, optionsNotInDb);
+                var resulNotInDbt = await messageFormNotInDb.Result;
+            }
+
+
+            var parameters = new ModalParameters().Add(nameof(LiftGiverTaker.Message), $"Hello {_UserName}");
+            var options = new ModalOptions { UseCustomLayout = true };
+            var messageForm = Modal.Show<LiftGiverTaker>("LiftGiverTaker", parameters, options);
+            var result = await messageForm.Result;
+
+            if (result.Confirmed)
+            {
+                if (result.Data.ToString() == "LiftGiver")
+                {
+
+                }
+                if (result.Data.ToString() == "LiftTaker")
+                {
+
+                }
+            }
+
+
             _jsRuntime = JsRuntime;
             if (await GetInfoFromAPIAsync() == false) return;
             await _jsRuntime.InvokeVoidAsync("initMap", _StudentLocationJson, _ActualStucentLocationJson, _CalculatedRoute.EncodedPolyline);
         }
     }
 
-    public void Dispose()
+	async Task Accept()
+	{
+
+	}
+
+	async Task Reject()
+    {
+
+    }
+
+
+	public void Dispose()
     {
         _hotKeysContext?.Dispose();
     }
