@@ -12,4 +12,6 @@ public interface IYberRepository
     public Task ApproveLift(Uber_Students requester, Uber_Students requestee);
     public Task<Uber_Students> FetchActiveRequests(Uber_Students user);
     public Task<Uber_Students> GetStudentFromIdAsync(int studentID);
+    public Task<bool> WantToGetALift(int studentID, bool accept);
+    public Task<bool> OfferToDriveAsync(int studentID, bool accept);
 }

@@ -63,7 +63,7 @@ public class CarpoolController : ControllerBase
     }
 
     [HttpPost("/RequestLift")]
-    public async Task<HttpStatusCode> RequestLiftFromStudent([FromServices] IYberService service, string RequesterUserName,
+    public async Task<HttpStatusCode> RequestLiftFromStudentAsync([FromServices] IYberService service, string RequesterUserName,
         string RequesteeUserName)
     {
         try
@@ -74,12 +74,13 @@ public class CarpoolController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "RequestLiftFromStudent failed");
+            return HttpStatusCode.InternalServerError;
             throw;
         }
     }
 
     [HttpPost("/AcceptLift")]
-    public async Task<HttpStatusCode> ApproveLiftFromUser([FromServices] IYberService service, string RequesterUserName,
+    public async Task<HttpStatusCode> ApproveLiftFromUserAsync([FromServices] IYberService service, string RequesterUserName,
         string RequesteeUserName)
     {
         try
@@ -90,12 +91,13 @@ public class CarpoolController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "ApproveLiftFromUser failed");
+            return HttpStatusCode.InternalServerError;
             throw;
         }
     }
 
     [HttpPost("/ViewLifts")]
-    public async Task<List<RequestDTO>> GetActiveRequests([FromServices] IYberService service, string studentName)
+    public async Task<List<RequestDTO>> GetActiveRequestsAsync([FromServices] IYberService service, string studentName)
     {
         try
         {
@@ -109,8 +111,40 @@ public class CarpoolController : ControllerBase
         }
     }
 
+    [HttpPost("/WantLift")]
+    public async Task<HttpStatusCode> WantLiftAsync([FromServices] IYberService service, int studentID, bool accept)
+    {
+        try
+        {
+            var result = await service.WantToGetALiftAsync(studentID, accept); // TODO :D 
+            return result == false ? HttpStatusCode.BadRequest : HttpStatusCode.OK;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "OfferLift failed");
+            return HttpStatusCode.InternalServerError;
+            throw;
+        }
+    }
+    
+    [HttpPost("/OfferDrive")]
+    public async Task<HttpStatusCode> OfferDriveAsync([FromServices] IYberService service, int studentID, bool accept)
+    {
+        try
+        {
+            var result = await service.OfferToDriveAsync(studentID, accept); // TODO :D 
+            return result == false ? HttpStatusCode.BadRequest : HttpStatusCode.OK;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "OfferLift failed");
+            return HttpStatusCode.InternalServerError;
+            throw;
+        }
+    }
+
     [HttpPost("/GetStudentsFromID")]
-    public async Task<StudentDTO> GetStudentsFromID([FromServices] IYberService service, int studentID)
+    public async Task<StudentDTO> GetStudentsFromIdAsync([FromServices] IYberService service, int studentID)
     {
         try
         {
