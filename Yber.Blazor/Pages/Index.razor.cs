@@ -3,6 +3,7 @@ using System.Text.Json;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.JSInterop;
 using Toolbelt.Blazor.HotKeys2;
 using Yber.Services.DTO;
@@ -32,7 +33,8 @@ public partial class Index : IDisposable
     private string _UserName { get; set; }
     private string _FirstName { get; set; }
     
-    private List<StudentDTO> _students { get; set; }
+    private List<StudentDTO> _liftStudents { get; set; }
+    private List<StudentDTO> _driverStudents { get; set; }
     private StudentDTO _actualStudent { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -45,30 +47,37 @@ public partial class Index : IDisposable
     private async Task GetUserInfoFromAPI()
     {
         _authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        
-        // TODO SSL ERRORS
         _httpClient = MyHttpClient;
         
         if (_authenticationState.User.Identity == null) return;
         _UserName = _authenticationState.User.Identity.Name;
         
-        _students = await _httpClient.GetFromJsonAsync<List<StudentDTO>>(
+        _liftStudents = await _httpClient.GetFromJsonAsync<List<StudentDTO>>(
             $"{AppSettings["YberAPIBaseURI"]}GetStudentLift");
-        _actualStudent = _students.Find(s => s.Username == _UserName);
+        _driverStudents = await _httpClient.GetFromJsonAsync<List<StudentDTO>>(
+            $"{AppSettings["YberAPIBaseURI"]}GetStudentDriver");
+        _actualStudent = _liftStudents.FirstOrDefault(s => s.Username == _UserName) ?? _driverStudents.FirstOrDefault(s => s.Username == _UserName);
 
-        _FirstName = _actualStudent == null ? "Null" : _actualStudent.First_Name;
+        _FirstName = _actualStudent == null ? "" : _actualStudent.First_Name;
     }
 
     // ReSharper disable once InconsistentNaming
-    private async Task GetInfoFromAPIAsync()
+    private async Task<bool> GetInfoFromAPIAsync()
     {
-        _CalculatedRoute = (await (await _httpClient.PostAsync
-        ($"{AppSettings["YberAPIBaseURI"]}GetStudentRoute?studentName={_UserName}",null))
-            .Content.ReadFromJsonAsync<CalculatedRouteDTO>())!;
+        if (!_FirstName.IsNullOrEmpty())
+        {
+            _CalculatedRoute = (await (await _httpClient.PostAsync
+                    ($"{AppSettings["YberAPIBaseURI"]}GetStudentRoute?studentName={_UserName}", null))
+                .Content.ReadFromJsonAsync<CalculatedRouteDTO>())!;
+        }
+        else
+        {
+            return false;
+        };
         
         var studentsCoordinates = new List<StudentCoordinateDTO>();
         
-        foreach (var student in _students)
+        foreach (var student in _liftStudents)
         {
             studentsCoordinates.Add(new StudentCoordinateDTO
             {
@@ -85,6 +94,8 @@ public partial class Index : IDisposable
         
         _StudentLocationJson = JsonSerializer.Serialize(studentsCoordinates);
         _ActualStucentLocationJson = JsonSerializer.Serialize(studentCoord);
+
+        return true;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -92,7 +103,7 @@ public partial class Index : IDisposable
         if (firstRender)
         {
             _jsRuntime = JsRuntime;
-            await GetInfoFromAPIAsync();
+            if (await GetInfoFromAPIAsync() == false) return;
             await _jsRuntime.InvokeVoidAsync("initMap", _StudentLocationJson, _ActualStucentLocationJson, _CalculatedRoute.EncodedPolyline);
         }
     }
