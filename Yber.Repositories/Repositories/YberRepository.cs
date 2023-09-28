@@ -109,12 +109,43 @@ public class YberRepository : IYberRepository
         return student;
     }
 
+    public async Task<bool> WantToGetALift(int studentID, bool accept)
+    {
+        var _student = await _context.Uber_Students
+            .FirstOrDefaultAsync(s => s.ID == studentID);
+        _student.Lift_Take = accept;
+        try
+        {
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> OfferToDriveAsync(int studentID, bool accept)
+    {
+        var _student = await _context.Uber_Students.FirstOrDefaultAsync(s => s.ID == studentID);
+        _student.Lift_Give = accept;
+        try
+        { 
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
     public async Task<Uber_Students> FetchActiveRequests(Uber_Students user)
     {
         var foundRequests = await _context.Uber_Students
             .Where(r => r == user)
             .Include(s => s.Requests)
             .FirstOrDefaultAsync();
-        return foundRequests;
+        return foundRequests ?? new Uber_Students();
     }
 }
