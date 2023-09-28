@@ -29,8 +29,12 @@ builder.Services.AddLogging(loggingBuilder =>
 });
 builder.Services.AddDbContext<YberContext>();
 
+builder.Services.AddCors();
+
 var app = builder.Build();
 
+app.UseStaticFiles();
+app.UseCors(o => o.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin());
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
