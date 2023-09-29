@@ -158,7 +158,7 @@ public class CarpoolController : ControllerBase
         }
     }
 
-    [HttpGet("GetStudentFromName")]
+    [HttpGet("/GetStudentFromName")]
     public async Task<StudentDTO> GetStudentFromNameAsync([FromServices] IYberService service, string studentName)
     {
         try
