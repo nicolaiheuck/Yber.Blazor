@@ -144,13 +144,23 @@ public partial class Index : IDisposable
 
             if (result.Confirmed)
             {
+                var currentUser = await _httpClient.GetFromJsonAsync<StudentDTO>(
+                    $"{AppSettings["YberAPIBaseURI"]}GetStudentFromName?studentName={_UserName}");
                 if (result.Data.ToString() == "LiftGiver")
                 {
-
+                    await _httpClient.PostAsync(
+                        $"{AppSettings["YberAPIBaseURI"]}WantLift?studentID={currentUser.Id}&accept=false", null);
+                    await _httpClient.PostAsync(
+                        $"{AppSettings["YberAPIBaseURI"]}OfferDrive?studentID={currentUser.Id}&accept=true", null);
+                    StateHasChanged();
                 }
                 if (result.Data.ToString() == "LiftTaker")
                 {
-
+                    await _httpClient.PostAsync(
+                        $"{AppSettings["YberAPIBaseURI"]}WantLift?studentID={currentUser.Id}&accept=true", null);
+                    await _httpClient.PostAsync(
+                        $"{AppSettings["YberAPIBaseURI"]}OfferDrive?studentID={currentUser.Id}&accept=false", null);
+                    StateHasChanged();
                 }
             }
 
