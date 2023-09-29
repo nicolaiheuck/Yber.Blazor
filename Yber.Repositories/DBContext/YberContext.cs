@@ -13,8 +13,8 @@ public class YberContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // TODO REMEMBER TO CHANGE SQL CONNECTION STRING
-        var cnString = "server=10.131.15.57;user=program;password=SuperSecretPassword1337;database=UBER";
-        // var cnString = "server=localhost;user=program;password=SuperSecretPassword1337;database=UBER";
+        // var cnString = "server=10.131.15.57;user=program;password=SuperSecretPassword1337;database=UBER";
+        var cnString = "server=localhost;user=program;password=SuperSecretPassword1337;database=UBER";
         var serverVersion = new MySqlServerVersion(new Version(10,9,0));
         optionsBuilder.UseMySql(cnString, serverVersion)
             .LogTo(Console.WriteLine, LogLevel.Information);
