@@ -137,14 +137,18 @@ public class YberService : IYberService
     {
         var student = await _YberRepository.GetStudentFromName(studentName);
 
+        double lat;
+        double lng;
+        Double.TryParse(student.Lattitude, CultureInfo.InvariantCulture, out lat);
+        Double.TryParse(student.Longitude, CultureInfo.InvariantCulture, out lng);
         var studentDTO = new StudentDTO
         {
             Id = student.ID,
             First_Name = student.Name_First,
             LatLng = new double[]
             {
-                Double.Parse(student.Lattitude),
-                Double.Parse(student.Longitude)
+                lat,
+                lng
             },
             Lift_Take = student.Lift_Take,
             Lift_Give = student.Lift_Give,
