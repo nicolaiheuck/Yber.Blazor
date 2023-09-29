@@ -18,6 +18,7 @@
 
 	//Global - Modal
 	"DeleteConfirmation": "Er du sikker på du vil slette",
+	"NotInDB": "Du er i øjeblikket ikke registreret hos os. kontakt venligst en administrator eller skriv til os på: YberContact@peterhymoellerhotmail.onmicrosoft.com",
 
 	//Index
 	"HelloWorld": "Hej!"

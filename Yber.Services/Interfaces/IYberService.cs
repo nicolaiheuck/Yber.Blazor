@@ -13,4 +13,5 @@ public interface IYberService
     public Task<StudentDTO> GetStudentFromIdAsync(int studentID);
     public Task<bool> OfferToDriveAsync(int studentId, bool accept);
     public Task<bool> WantToGetALiftAsync(int studentId, bool accept);
+    public Task<StudentDTO> GetStudentFromNameAsync(string studentName);
 }

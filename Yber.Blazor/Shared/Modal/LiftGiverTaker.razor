@@ -5,14 +5,15 @@
 <div class="modal ">
     <div class="modal-content rz-background-color-Info-light">
         <div class="modal-header">
-            <h3 class="modal-title">Info</h3>
+            <h3 class="modal-title">Lift Options</h3>
         </div>
         <div class="modal-body">
             <p class="message">@Message</p>
-           <p> @_languageTable["NotInDB"]</p>
+            <p>Please Select one of the options bellow:</p>
         </div>
         <div class="modal-footer">
-            <RadzenButton Click="OK" ButtonStyle="ButtonStyle.Dark" class="modal-button">OK</RadzenButton>
+            <RadzenButton Click="LiftGiverAsynce" ButtonStyle="ButtonStyle.Info" class="modal-button">I can give a lift</RadzenButton>
+            <RadzenButton Click="LiftTakerAsynce" ButtonStyle="ButtonStyle.Info" class="modal-button">I want a lift</RadzenButton>
             <RadzenButton Click="Cancel" ButtonStyle="ButtonStyle.Light" class="modal-button">Cancel</RadzenButton>
         </div>
     </div>
@@ -33,7 +34,9 @@
             .Add(Code.Escape, async () => await Cancel());
     }
 
-    async Task OK() => await BlazoredModal.CloseAsync();
+    async Task LiftGiverAsynce() => await BlazoredModal.CloseAsync(ModalResult.Ok("LiftGiver"));
+    async Task LiftTakerAsynce() => await BlazoredModal.CloseAsync(ModalResult.Ok("LiftTaker"));
+
     async Task Cancel() => await BlazoredModal.CancelAsync();
 
     public void Dispose()
