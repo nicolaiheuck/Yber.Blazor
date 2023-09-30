@@ -70,7 +70,11 @@ public partial class Index : IDisposable
                     ($"{AppSettings["YberAPIBaseURI"]}GetStudentRoute?studentName={_UserName}", null))
                 .Content.ReadFromJsonAsync<CalculatedRouteDTO>())!;
         }
-        else { return false; } // RETURN
+        else
+        {
+            ToastService.ShowError("You are not logged in, or authenticated. Please log in first!");
+            return false;
+        } // RETURN
         
         var studentsCoordinates = new List<StudentCoordinateDTO>();
         if (_actualStudent.Lift_Give == true)
@@ -152,13 +156,16 @@ public partial class Index : IDisposable
         switch (httpResponseMessage.StatusCode)
         {
             case HttpStatusCode.OK:
-                ; // Success
+                ToastService.ShowToast(ToastLevel.Success, "Lift request accepted!");
                 break;
             case HttpStatusCode.BadRequest:
-                ; // Bad request
+                ToastService.ShowToast(ToastLevel.Warning, "Whoopsie, that was a bad request. It have been logged");
                 break;
             case HttpStatusCode.InternalServerError:
-                ; // Error in API
+                ToastService.ShowToast(ToastLevel.Error, "An error occured in the API - our server hamsters are looking into it now!");
+                break;
+            default:
+                ToastService.ShowToast(ToastLevel.Error, "An unexpected error have occured ...");
                 break;
         }
     }
@@ -176,19 +183,25 @@ public partial class Index : IDisposable
         switch (httpResponseMessage.StatusCode)
         {
             case HttpStatusCode.OK:
-                ; // Success
+                ToastService.ShowToast(ToastLevel.Success, "Lift requested!");
                 break;
             case HttpStatusCode.BadRequest:
-                ; // Bad request
+                ToastService.ShowToast(ToastLevel.Warning, "Whoopsie, that was a bad request. It have been logged");
                 break;
             case HttpStatusCode.InternalServerError:
-                ; // Error in API
+                ToastService.ShowToast(ToastLevel.Error, "An error occured in the API - our server hamsters are looking into it now!");
+                break;
+            default:
+                ToastService.ShowToast(ToastLevel.Error, "An unexpected error have occured ...");
                 break;
         }
     }
 
     async Task ChangeDriveLift(bool drive)
     {
+        var msg = "You are now looking for others to drive";
+        if (drive) msg = "You are now looking at requests";
+        ToastService.ShowToast(ToastLevel.Info, msg);
         await UpdateUIInformationAsync(drive);
     }
 
