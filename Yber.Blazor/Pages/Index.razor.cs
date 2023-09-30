@@ -78,8 +78,12 @@ public partial class Index : IDisposable
             {
                 studentsCoordinates.Add(new StudentCoordinateDTO
                 {
-                    lat = student.LatLng[0],
-                    lng = student.LatLng[1]
+                    name = student.First_Name,
+                    latlng = new latlng
+                    {
+                        lat = student.LatLng[0],
+                        lng = student.LatLng[1]
+                    }
                 });
             }
         }
@@ -89,16 +93,24 @@ public partial class Index : IDisposable
             {
                 studentsCoordinates.Add(new StudentCoordinateDTO
                 {
-                    lat = student.LatLng[0],
-                    lng = student.LatLng[1]
+                    name = student.First_Name,
+                    latlng = new latlng
+                    {
+                        lat = student.LatLng[0],
+                        lng = student.LatLng[1]
+                    }
                 });
             }
         }
 
         var studentCoord = new StudentCoordinateDTO
         {
-            lat = _actualStudent.LatLng[0],
-            lng = _actualStudent.LatLng[1]
+            name = _actualStudent.First_Name,
+            latlng = new latlng
+            {
+                lat = _actualStudent.LatLng[0],
+                lng = _actualStudent.LatLng[1]
+            }
         };
         
         _StudentLocationJson = JsonSerializer.Serialize(studentsCoordinates);
@@ -181,7 +193,6 @@ public partial class Index : IDisposable
         if (await GetInfoFromAPIAsync() == false) return;
         await _jsRuntime.InvokeVoidAsync("initMap", _StudentLocationJson, _ActualStucentLocationJson, _CalculatedRoute.EncodedPolyline);
     }
-
-
+    
 	public void Dispose() { }
 }
