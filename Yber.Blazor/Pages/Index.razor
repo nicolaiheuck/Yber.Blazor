@@ -33,14 +33,14 @@
                 <RadzenDataGridColumn TItem="StudentDTO" Property="First_Name" Title="Name"></RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="StudentDTO" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
                     <Template>
-                        Accept
-                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="done" Size="ButtonSize.Small" Class="m-1" Click="@(args => Accept(@context.Id))"/>
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="StudentDTO" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
-                    <Template>
-                        Reject
-                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Class="m-1" Click="@(args => Reject(@context.Id))"/>
+                        @if (_actualStudent.Lift_Give == true)
+                        {
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="motorcycle" Size="ButtonSize.Small" Class="m-1" Click="@(args => AcceptRequest(@context.Id))">Accept request</RadzenButton>
+                        }
+                        else
+                        {
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="flight_takeoff" Size="ButtonSize.Small" Class="m-1" Click="@(args => RequestLift(@context.Id))">Request a lift</RadzenButton>
+                        }
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>

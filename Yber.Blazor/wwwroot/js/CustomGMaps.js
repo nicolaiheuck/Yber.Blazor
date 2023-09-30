@@ -38,21 +38,18 @@ async function initMap(listOfLocations, currentLocation, encodedPolyline) {
         position: position,
         title: "EUC Syd",
     });
-    console.log(originPos);
-    console.log(originPos.latlng);
+    
     // Marker, positioned at current location
     const origin = new AdvancedMarkerElement({
         map: map,
         position: originPos,
         title: "Dig"
     });
-    console.log(listOfLocations);
+    
     addMarkers(JSON.parse(listOfLocations));
     
     function addMarkers(jsonStudentDTO) {
-        console.log(jsonStudentDTO);
         for (i = 0; i < jsonStudentDTO.length; i++) {
-            console.log(jsonStudentDTO[i]["name"]);
             var marker = new AdvancedMarkerElement({
                 map: map,
                 position: jsonStudentDTO[i]["latlng"],

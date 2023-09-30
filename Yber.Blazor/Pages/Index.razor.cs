@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text.Json;
 using Blazored.Modal;
 using Blazored.Modal.Services;
@@ -139,18 +140,51 @@ public partial class Index : IDisposable
         }
     }
 
-	async Task Accept(int studentId)
+	async Task AcceptRequest(int studentId)
     {
         var requestUri = $"{AppSettings["YberAPIBaseURI"]}GetStudentsFromID?studentID={studentId}"; // Weirdest exception ever o_O
-        var student = await _httpClient.PostAsync(requestUri, null);
+        var httpResponseMessage = await _httpClient.PostAsync(requestUri, null);
+        var student = await httpResponseMessage.Content.ReadFromJsonAsync<StudentDTO>();
         var me = _actualStudent;
+
+        requestUri = $"{AppSettings["YberAPIBaseURI"]}AcceptLift?RequesterUserName={student.Username}&RequesteeUserName={me.Username}";
+        httpResponseMessage = await _httpClient.PostAsync(requestUri, null);
+        switch (httpResponseMessage.StatusCode)
+        {
+            case HttpStatusCode.OK:
+                ; // Success
+                break;
+            case HttpStatusCode.BadRequest:
+                ; // Bad request
+                break;
+            case HttpStatusCode.InternalServerError:
+                ; // Error in API
+                break;
+        }
     }
 
-	async Task Reject(int studentId)
+	async Task RequestLift(int studentId)
     {
         var requestUri = $"{AppSettings["YberAPIBaseURI"]}GetStudentsFromID?studentID={studentId}"; // Weirdest exception ever o_O
-        var student = await _httpClient.PostAsync(requestUri, null);
+        var httpResponseMessage = await _httpClient.PostAsync(requestUri, null);
+        var student = await httpResponseMessage.Content.ReadFromJsonAsync<StudentDTO>();
         var me = _actualStudent;
+
+        requestUri =
+            $"{AppSettings["YberAPIBaseURI"]}RequestLift?RequesterUserName={me.Username}&RequesteeUserName={student.Username}";
+        httpResponseMessage = await _httpClient.PostAsync(requestUri, null);
+        switch (httpResponseMessage.StatusCode)
+        {
+            case HttpStatusCode.OK:
+                ; // Success
+                break;
+            case HttpStatusCode.BadRequest:
+                ; // Bad request
+                break;
+            case HttpStatusCode.InternalServerError:
+                ; // Error in API
+                break;
+        }
     }
 
     async Task ChangeDriveLift(bool drive)
@@ -163,15 +197,35 @@ public partial class Index : IDisposable
     {
         var currentUser = await _httpClient.GetFromJsonAsync<StudentDTO>(
             $"{AppSettings["YberAPIBaseURI"]}GetStudentFromName?studentName={_UserName}");
+        var requestListResponseMessage =
+            await _httpClient.PostAsync($"{AppSettings["YberAPIBaseURI"]}ViewLifts?studentName={_UserName}", null);
+        var requestList = await requestListResponseMessage.Content.ReadFromJsonAsync<List<LiftDTO>>();
+        
         if (currentUser == null) return;
         _actualStudent = currentUser;
         switch (drive)
         {
-            case true:
+            case true: // TODO Show list of requests!
                 _actualStudent.Lift_Give = true;
                 _actualStudent.Lift_Take = false;
-                _liftStudents.Remove(_liftStudents.FirstOrDefault(u => u.Username == _UserName));
-                _studentDataGrid = _liftStudents;
+                var requestStudentDTOList = new List<StudentDTO>();
+                foreach (var Lift in requestList)
+                {
+                    var studentResponseMessage = await _httpClient.PostAsync($"{AppSettings["YberAPIBaseURI"]}GetStudentsFromID?studentID={Lift.requesterID}", null);
+                    // GetStudentsFromID
+                    var student = await studentResponseMessage.Content.ReadFromJsonAsync<StudentDTO>();
+                    requestStudentDTOList.Add(new StudentDTO
+                    {
+                        Id = student.Id,
+                        First_Name = student.First_Name,
+                        LatLng = student.LatLng,
+                        Lift_Take = student.Lift_Take,
+                        Lift_Give = student.Lift_Give,
+                        Username = student.Username
+                    });
+                }
+                _studentDataGrid = requestStudentDTOList;
+                // _studentDataGrid = _liftStudents;
                 break;
             case false:
                 _actualStudent.Lift_Give = false;
