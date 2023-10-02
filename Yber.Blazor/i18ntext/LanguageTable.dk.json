@@ -31,5 +31,6 @@
   "Error1": "Der er sket en fejl i API'en, vores server team er blevet informeret!",
   "Error2": "En uforklarlig fejl er opstået ...",
   "ChangeToLift": "Du leder nu efter andre der kan køre",
-  "ChangeToDrive": "Du ser nu på liftanmodninger"
+  "ChangeToDrive": "Du ser nu på liftanmodninger",
+  
 }

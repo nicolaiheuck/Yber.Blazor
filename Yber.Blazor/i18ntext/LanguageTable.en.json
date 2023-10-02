@@ -34,6 +34,7 @@
 	"Error1": "There have been an error in the API. Our server team have been informed.",
 	"Error2": "An unexpected error occured ...",
 	"ChangeToLift": "You are now looking for others to drive.",
-	"ChangeToDrive": "You are now looking at lift-requests."
+	"ChangeToDrive": "You are now looking at lift-requests.",
+	
 
 }
