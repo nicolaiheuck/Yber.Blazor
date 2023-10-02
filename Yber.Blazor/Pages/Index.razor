@@ -9,14 +9,27 @@
 
 <div class="text-center">
     <h3>@_languageTable["Welcome1"]@_FirstName@_languageTable["Welcome2"]</h3>
+    <RadzenCard class="rz-shadow-6">
+        <h3>Welcome @_FirstName to</h3>
+        <img class="m-2" src="/images/Über_logo.png" alt="Kantine logo" style="max-height: 150px" />
+    </RadzenCard>
 </div>
-<div id="map"></div>
+<RadzenCard class="rz-shadow-6 m-2">
+    <div id="map"></div>
+</RadzenCard>
 
 @if (_actualStudent is not null)
 {
     @if (_actualStudent.Lift_Give == true) {<RadzenButton Click="@(args => ChangeDriveLift(false))">@_languageTable["HaveLift"]</RadzenButton>}
     @if (_actualStudent.Lift_Take == true) {<RadzenButton Click="@(args => ChangeDriveLift(true))">@_languageTable["GiveLift"] (Dybbøl)</RadzenButton>}
     
+    <div class="text-center">
+        <RadzenCard class="rz-shadow-6 m-2">
+            <p class="text-center m-1">You want to @if (_actualStudent.Lift_Take == true) {<span>get</span>} @if (_actualStudent.Lift_Give == true) {<span>give</span>} a lift</p>
+            @if (_actualStudent.Lift_Give == true) {<RadzenButton class="m-1" Click="@(args => ChangeDriveLift(false))">Want to have a lift</RadzenButton>}
+            @if (_actualStudent.Lift_Take == true) {<RadzenButton class="m-1" Click="@(args => ChangeDriveLift(true))">Want to offer a ride (Dybbøl)</RadzenButton>}
+        </RadzenCard>
+    </div>
     <div class="text-center">
         <RadzenDataGrid @ref="_LiftGiverGrid"
                         TItem="StudentDTO"
@@ -26,7 +39,7 @@
                         SelectionMode="DataGridSelectionMode.Single"
                         PagerHorizontalAlign="HorizontalAlign.Center"
                         Data="@_studentDataGrid"
-                        class="m-2">
+                        class="rz-shadow-6 m-2">
 
             <Columns>
                 <RadzenDataGridColumn TItem="StudentDTO" Property="First_Name" Title="Name"></RadzenDataGridColumn>
