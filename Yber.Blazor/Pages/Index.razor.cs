@@ -232,7 +232,7 @@ public partial class Index : IDisposable
         _actualStudent = currentUser;
         switch (drive)
         {
-            case true: // TODO Show list of requests!
+            case true:
                 _actualStudent.Lift_Give = true;
                 _actualStudent.Lift_Take = false;
                 var requestStudentDTOList = new List<StudentDTO>();
