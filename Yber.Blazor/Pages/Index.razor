@@ -1,5 +1,6 @@
 ﻿@page "/"
 @implements IDisposable
+
 @attribute [Authorize(Roles = "Admin, Elev")]
 @using Yber.Services.DTO
 
@@ -7,67 +8,42 @@
 <PageTitle>Home</PageTitle>
 
 <div class="text-center">
-	<h3>Welcome @_FirstName to ÜBER</h3>
+    <h3>Welcome @_FirstName to ÜBER</h3>
 </div>
 <div id="map"></div>
 
 @if (_actualStudent is not null)
 {
-	@if (_actualStudent.Lift_Take == true)
-	{
-		<div class="text-center">
-			<RadzenDataGrid @ref="_LiftGiverGrid"
-							TItem="StudentDTO"
-							AllowPaging="true"
-							PageSize="10"
-							AllowColumnResize="true"
-							SelectionMode="DataGridSelectionMode.Single"
-							PagerHorizontalAlign="HorizontalAlign.Center"
-							Data="@_driverStudents">
+    <p class="text-center">You want to @if (_actualStudent.Lift_Take == true) {<span>get</span>} @if (_actualStudent.Lift_Give == true) {<span>give</span>} a lift</p>
+    @if (_actualStudent.Lift_Give == true) {<RadzenButton Click="@(args => ChangeDriveLift(false))">Want to have a lift</RadzenButton>}
+    @if (_actualStudent.Lift_Take == true) {<RadzenButton Click="@(args => ChangeDriveLift(true))">Want to offer a ride (Dybbøl)</RadzenButton>}
+    
+    <div class="text-center">
+        <RadzenDataGrid @ref="_LiftGiverGrid"
+                        TItem="StudentDTO"
+                        AllowPaging="true"
+                        PageSize="10"
+                        AllowColumnResize="true"
+                        SelectionMode="DataGridSelectionMode.Single"
+                        PagerHorizontalAlign="HorizontalAlign.Center"
+                        Data="@_studentDataGrid"
+                        class="m-2">
 
-				<Columns>
-					<RadzenDataGridColumn TItem="StudentDTO" Property="First_Name" Title="Name"></RadzenDataGridColumn>
-					<RadzenDataGridColumn TItem="StudentDTO" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
-						<Template>
-							<RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="done" Size="ButtonSize.Small" Class="m-1" Click="@(args =>  Accept())" />
-						</Template>
-					</RadzenDataGridColumn>
-					<RadzenDataGridColumn TItem="StudentDTO" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
-						<Template>
-							<RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Class="m-1" Click="@(args =>  Reject())" />
-						</Template>
-					</RadzenDataGridColumn>
-				</Columns>
-			</RadzenDataGrid>
-		</div>
-	}
-
-	@if (_actualStudent.Lift_Give == true)
-	{
-		<div class="text-center">
-			<RadzenDataGrid @ref="_LiftTakerGrid"
-							TItem="StudentDTO"
-							AllowPaging="true"
-							PageSize="10"
-							AllowColumnResize="true"
-							SelectionMode="DataGridSelectionMode.Single"
-							PagerHorizontalAlign="HorizontalAlign.Center"
-							Data="@_liftStudents">
-
-				<Columns>
-					<RadzenDataGridColumn TItem="StudentDTO" Property="First_Name" Title="Name"></RadzenDataGridColumn>
-					<RadzenDataGridColumn TItem="StudentDTO" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
-						<Template>
-							<RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="done" Size="ButtonSize.Small" Class="m-1" Click="@(args =>  Accept())" />
-						</Template>
-					</RadzenDataGridColumn>
-					<RadzenDataGridColumn TItem="StudentDTO" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
-						<Template>
-							<RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Class="m-1" Click="@(args =>  Reject())" />
-						</Template>
-					</RadzenDataGridColumn>
-				</Columns>
-			</RadzenDataGrid>
-		</div>
-	}
+            <Columns>
+                <RadzenDataGridColumn TItem="StudentDTO" Property="First_Name" Title="Name"></RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="StudentDTO" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
+                    <Template>
+                        @if (_actualStudent.Lift_Give == true)
+                        {
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="motorcycle" Size="ButtonSize.Small" Class="m-1" Click="@(args => AcceptRequest(@context.Id))">Accept request</RadzenButton>
+                        }
+                        else
+                        {
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="flight_takeoff" Size="ButtonSize.Small" Class="m-1" Click="@(args => RequestLift(@context.Id))">Request a lift</RadzenButton>
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </div>
 }

@@ -3,7 +3,8 @@ let map;
 async function initMap(listOfLocations, currentLocation, encodedPolyline) {
     // The location of EUC Syd
     const position = { lat: 54.909290, lng: 9.799820 };
-    const originPos = JSON.parse(currentLocation);
+    let jsonOriginPos = JSON.parse(currentLocation);
+    const originPos = jsonOriginPos.latlng;
     
     // Import libs from Google
     const { Map } = await google.maps.importLibrary("maps");
@@ -47,13 +48,12 @@ async function initMap(listOfLocations, currentLocation, encodedPolyline) {
     
     addMarkers(JSON.parse(listOfLocations));
     
-    function addMarkers(latLngArray) {
-        
-        for (i = 0; i < latLngArray.length; i++) {
-
+    function addMarkers(jsonStudentDTO) {
+        for (i = 0; i < jsonStudentDTO.length; i++) {
             var marker = new AdvancedMarkerElement({
                 map: map,
-                position: latLngArray[i],
+                position: jsonStudentDTO[i]["latlng"],
+                title: jsonStudentDTO[i]["name"],
                 content: new PinElement({
                     background: "#00FF00",
                 }).element

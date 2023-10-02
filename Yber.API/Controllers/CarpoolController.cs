@@ -157,4 +157,19 @@ public class CarpoolController : ControllerBase
             throw;
         }
     }
+
+    [HttpGet("/GetStudentFromName")]
+    public async Task<StudentDTO> GetStudentFromNameAsync([FromServices] IYberService service, string studentName)
+    {
+        try
+        {
+            var student = await service.GetStudentFromNameAsync(studentName);
+            return student;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "GetStudentsFromName failed");
+            throw;
+        }
+    }
 }
