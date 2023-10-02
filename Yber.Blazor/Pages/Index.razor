@@ -5,18 +5,17 @@
 @using Yber.Services.DTO
 
 
-<PageTitle>Home</PageTitle>
+<PageTitle>@_languageTable["Home"]</PageTitle>
 
 <div class="text-center">
-    <h3>Welcome @_FirstName to ÜBER</h3>
+    <h3>@_languageTable["Welcome1"]@_FirstName@_languageTable["Welcome1"]</h3>
 </div>
 <div id="map"></div>
 
 @if (_actualStudent is not null)
 {
-    <p class="text-center">You want to @if (_actualStudent.Lift_Take == true) {<span>get</span>} @if (_actualStudent.Lift_Give == true) {<span>give</span>} a lift</p>
-    @if (_actualStudent.Lift_Give == true) {<RadzenButton Click="@(args => ChangeDriveLift(false))">Want to have a lift</RadzenButton>}
-    @if (_actualStudent.Lift_Take == true) {<RadzenButton Click="@(args => ChangeDriveLift(true))">Want to offer a ride (Dybbøl)</RadzenButton>}
+    @if (_actualStudent.Lift_Give == true) {<RadzenButton Click="@(args => ChangeDriveLift(false))">@_languageTable["HaveLift"]</RadzenButton>}
+    @if (_actualStudent.Lift_Take == true) {<RadzenButton Click="@(args => ChangeDriveLift(true))">@_languageTable["GiveLift"] (Dybbøl)</RadzenButton>}
     
     <div class="text-center">
         <RadzenDataGrid @ref="_LiftGiverGrid"
@@ -35,11 +34,11 @@
                     <Template>
                         @if (_actualStudent.Lift_Give == true)
                         {
-                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="motorcycle" Size="ButtonSize.Small" Class="m-1" Click="@(args => AcceptRequest(@context.Id))">Accept request</RadzenButton>
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="motorcycle" Size="ButtonSize.Small" Class="m-1" Click="@(args => AcceptRequest(@context.Id))">@_languageTable["AcceptRequest"]</RadzenButton>
                         }
                         else
                         {
-                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="flight_takeoff" Size="ButtonSize.Small" Class="m-1" Click="@(args => RequestLift(@context.Id))">Request a lift</RadzenButton>
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="flight_takeoff" Size="ButtonSize.Small" Class="m-1" Click="@(args => RequestLift(@context.Id))">@_languageTable["RequestLift"]</RadzenButton>
                         }
                     </Template>
                 </RadzenDataGridColumn>

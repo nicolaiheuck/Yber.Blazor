@@ -72,7 +72,8 @@ public partial class Index : IDisposable
         }
         else
         {
-            ToastService.ShowError("You are not logged in, or authenticated. Please log in first!");
+            // ToastService.ShowError("You are not logged in, or authenticated. Please log in first!");
+            ToastService.ShowError(_languageTable["NotLoggedIn"]);
             return false;
         } // RETURN
         
@@ -156,16 +157,20 @@ public partial class Index : IDisposable
         switch (httpResponseMessage.StatusCode)
         {
             case HttpStatusCode.OK:
-                ToastService.ShowToast(ToastLevel.Success, "Lift request accepted!");
+                // ToastService.ShowToast(ToastLevel.Success, "Lift request accepted!");
+                ToastService.ShowToast(ToastLevel.Success, _languageTable["LiftRequestAccepted"]);
                 break;
             case HttpStatusCode.BadRequest:
-                ToastService.ShowToast(ToastLevel.Warning, "Whoopsie, that was a bad request. It have been logged");
+                // ToastService.ShowToast(ToastLevel.Warning, "Whoopsie, that was a bad request. It have been logged");
+                ToastService.ShowToast(ToastLevel.Warning, _languageTable["BadRequest"]);
                 break;
             case HttpStatusCode.InternalServerError:
-                ToastService.ShowToast(ToastLevel.Error, "An error occured in the API - our server hamsters are looking into it now!");
+                // ToastService.ShowToast(ToastLevel.Error, "An error occured in the API - our server hamsters are looking into it now!");
+                ToastService.ShowToast(ToastLevel.Error, _languageTable["Error1"]);
                 break;
             default:
-                ToastService.ShowToast(ToastLevel.Error, "An unexpected error have occured ...");
+                // ToastService.ShowToast(ToastLevel.Error, "An unexpected error have occured ...");
+                ToastService.ShowToast(ToastLevel.Error, _languageTable["Error2"]);
                 break;
         }
     }
@@ -199,8 +204,8 @@ public partial class Index : IDisposable
 
     async Task ChangeDriveLift(bool drive)
     {
-        var msg = "You are now looking for others to drive";
-        if (drive) msg = "You are now looking at requests";
+        var msg = _languageTable["ChangeToLift"];
+        if (drive) msg = _languageTable["ChangeToDrive"];
         ToastService.ShowToast(ToastLevel.Info, msg);
         await UpdateUIInformationAsync(drive);
     }

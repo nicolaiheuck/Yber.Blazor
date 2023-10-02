@@ -21,6 +21,19 @@
 	"NotInDB": "You are currently not registert with us. please conatact a Administartor or write to us on: YberContact@peterhymoellerhotmail.onmicrosoft.com",
 
 	//Index
-	"HelloWorld": "Hello!"
+	"Home": "Home",
+	"Welcome1": "Welcome ",
+	"Welcome2": " to ÜBER",
+	"HaveLift": "I want a lift",
+	"GiveLift": "I want to offer a lift",
+	"AcceptRequest": "Accept lift-request",
+	"RequestLift": "Request for lift",
+	"NotLoggedIn": "You are not logged in or authorized. Please log in first.",
+	"LiftRequestAccepted": "Lift-request accepted!",
+	"BadRequest": "Whoopsie, that was a bad request. It have been logged in our system.",
+	"Error1": "There have been an error in the API. Our server team have been informed.",
+	"Error2": "An unexpected error occured ...",
+	"ChangeToLift": "You are now looking for others to drive.",
+	"ChangeToDrive": "You are now looking at lift-requests."
 
 }
