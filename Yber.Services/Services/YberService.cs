@@ -92,8 +92,8 @@ public class YberService : IYberService
     {
         Uber_Students student = await _YberRepository.GetStudentFromIdAsync(studentID);
         
-        double.TryParse(student.Lattitude, out var lat);
-        double.TryParse(student.Longitude, out var lng);
+        double.TryParse(student.Lattitude, CultureInfo.InvariantCulture, out var lat);
+        double.TryParse(student.Longitude, CultureInfo.InvariantCulture, out var lng);
         
         return student == null ? new StudentDTO() : new StudentDTO
         {
