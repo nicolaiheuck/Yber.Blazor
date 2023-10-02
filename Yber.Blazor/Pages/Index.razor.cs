@@ -227,6 +227,7 @@ public partial class Index : IDisposable
         var requestListResponseMessage =
             await _httpClient.PostAsync($"{AppSettings["YberAPIBaseURI"]}ViewLifts?studentName={_UserName}", null);
         var requestList = await requestListResponseMessage.Content.ReadFromJsonAsync<List<LiftDTO>>();
+        var requestingStudentsLocationList = new List<StudentCoordinateDTO>();
         
         if (currentUser == null) return;
         _actualStudent = currentUser;
@@ -238,7 +239,8 @@ public partial class Index : IDisposable
                 var requestStudentDTOList = new List<StudentDTO>();
                 foreach (var Lift in requestList)
                 {
-                    var studentResponseMessage = await _httpClient.PostAsync($"{AppSettings["YberAPIBaseURI"]}GetStudentsFromID?studentID={Lift.requesteeID}", null);
+                    var requestUri = $"{AppSettings["YberAPIBaseURI"]}GetStudentsFromID?studentID={Lift.requesteeID}";
+                    var studentResponseMessage = await _httpClient.PostAsync(requestUri, null);
                     // GetStudentsFromID
                     var student = await studentResponseMessage.Content.ReadFromJsonAsync<StudentDTO>();
                     requestStudentDTOList.Add(new StudentDTO
@@ -249,6 +251,15 @@ public partial class Index : IDisposable
                         Lift_Take = student.Lift_Take,
                         Lift_Give = student.Lift_Give,
                         Username = student.Username
+                    });
+                    requestingStudentsLocationList.Add(new StudentCoordinateDTO
+                    {
+                        name = student.First_Name,
+                        latlng = new latlng
+                        {
+                            lat = student.LatLng[0],
+                            lng = student.LatLng[1]
+                        }
                     });
                 }
                 _studentDataGrid = requestStudentDTOList;
@@ -272,6 +283,7 @@ public partial class Index : IDisposable
         await _LiftGiverGrid.Reload();
         _jsRuntime = JsRuntime;
         if (await GetInfoFromAPIAsync() == false) return;
+        if (drive) _StudentLocationJson = JsonSerializer.Serialize(requestingStudentsLocationList);
         await _jsRuntime.InvokeVoidAsync("initMap", _StudentLocationJson, _ActualStucentLocationJson, _CalculatedRoute.EncodedPolyline);
     }
     
