@@ -5,11 +5,11 @@
 @using Yber.Services.DTO
 
 
-<PageTitle>Home</PageTitle>
+<PageTitle>@_languageTable["Home"]</PageTitle>
 
 <div class="text-center">
     <RadzenCard class="rz-shadow-6">
-        <h3>Welcome @_FirstName to</h3>
+        <h3>@_languageTable["Welcome1"]@_FirstName@_languageTable["Welcome2"]</h3>
         <img class="m-2" src="/images/Über_logo.png" alt="Kantine logo" style="max-height: 150px" />
     </RadzenCard>
 </div>
@@ -22,8 +22,8 @@
     <div class="text-center">
         <RadzenCard class="rz-shadow-6 m-2">
             <p class="text-center m-1">You want to @if (_actualStudent.Lift_Take == true) {<span>get</span>} @if (_actualStudent.Lift_Give == true) {<span>give</span>} a lift</p>
-            @if (_actualStudent.Lift_Give == true) {<RadzenButton class="m-1" Click="@(args => ChangeDriveLift(false))">Want to have a lift</RadzenButton>}
-            @if (_actualStudent.Lift_Take == true) {<RadzenButton class="m-1" Click="@(args => ChangeDriveLift(true))">Want to offer a ride (Dybbøl)</RadzenButton>}
+            @if (_actualStudent.Lift_Give == true) {<RadzenButton Click="@(args => ChangeDriveLift(false))">@_languageTable["HaveLift"]</RadzenButton>}
+            @if (_actualStudent.Lift_Take == true) {<RadzenButton Click="@(args => ChangeDriveLift(true))">@_languageTable["GiveLift"] (Dybbøl)</RadzenButton>}
         </RadzenCard>
     </div>
     <div class="text-center">
@@ -43,11 +43,11 @@
                     <Template>
                         @if (_actualStudent.Lift_Give == true)
                         {
-                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="motorcycle" Size="ButtonSize.Small" Class="m-1" Click="@(args => AcceptRequest(@context.Id))">Accept request</RadzenButton>
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="motorcycle" Size="ButtonSize.Small" Class="m-1" Click="@(args => AcceptRequest(@context.Id))">@_languageTable["AcceptRequest"]</RadzenButton>
                         }
                         else
                         {
-                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="flight_takeoff" Size="ButtonSize.Small" Class="m-1" Click="@(args => RequestLift(@context.Id))">Request a lift</RadzenButton>
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="flight_takeoff" Size="ButtonSize.Small" Class="m-1" Click="@(args => RequestLift(@context.Id))">@_languageTable["RequestLift"]</RadzenButton>
                         }
                     </Template>
                 </RadzenDataGridColumn>

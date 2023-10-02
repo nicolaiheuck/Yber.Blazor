@@ -72,7 +72,8 @@ public partial class Index : IDisposable
         }
         else
         {
-            ToastService.ShowError("You are not logged in, or authenticated. Please log in first!");
+            // ToastService.ShowError("You are not logged in, or authenticated. Please log in first!");
+            ToastService.ShowError(_languageTable["NotLoggedIn"]);
             return false;
         } // RETURN
         
@@ -138,9 +139,18 @@ public partial class Index : IDisposable
                 var messageFormNotInDb = Modal.Show<InfoMessage>("Info", parametersNotInDb, optionsNotInDb);
                 var resulNotInDbt = await messageFormNotInDb.Result;
             }
-            var currUser = await _httpClient.GetFromJsonAsync<StudentDTO>(
-                $"{AppSettings["YberAPIBaseURI"]}GetStudentFromName?studentName={_UserName}");
-            await UpdateUIInformationAsync((bool)currUser.Lift_Give);
+
+            try
+            {
+                var currUser = await _httpClient.GetFromJsonAsync<StudentDTO>(
+                    $"{AppSettings["YberAPIBaseURI"]}GetStudentFromName?studentName={_UserName}");
+                await UpdateUIInformationAsync((bool)currUser.Lift_Give);
+            }
+            catch (Exception e)
+            {
+                ToastService.ShowError(_languageTable["NotLoggedIn"]);
+                throw;
+            }
         }
     }
 
@@ -156,16 +166,20 @@ public partial class Index : IDisposable
         switch (httpResponseMessage.StatusCode)
         {
             case HttpStatusCode.OK:
-                ToastService.ShowToast(ToastLevel.Success, "Lift request accepted!");
+                // ToastService.ShowToast(ToastLevel.Success, "Lift request accepted!");
+                ToastService.ShowToast(ToastLevel.Success, _languageTable["LiftRequestAccepted"]);
                 break;
             case HttpStatusCode.BadRequest:
-                ToastService.ShowToast(ToastLevel.Warning, "Whoopsie, that was a bad request. It have been logged");
+                // ToastService.ShowToast(ToastLevel.Warning, "Whoopsie, that was a bad request. It have been logged");
+                ToastService.ShowToast(ToastLevel.Warning, _languageTable["BadRequest"]);
                 break;
             case HttpStatusCode.InternalServerError:
-                ToastService.ShowToast(ToastLevel.Error, "An error occured in the API - our server hamsters are looking into it now!");
+                // ToastService.ShowToast(ToastLevel.Error, "An error occured in the API - our server hamsters are looking into it now!");
+                ToastService.ShowToast(ToastLevel.Error, _languageTable["Error1"]);
                 break;
             default:
-                ToastService.ShowToast(ToastLevel.Error, "An unexpected error have occured ...");
+                // ToastService.ShowToast(ToastLevel.Error, "An unexpected error have occured ...");
+                ToastService.ShowToast(ToastLevel.Error, _languageTable["Error2"]);
                 break;
         }
     }
@@ -199,8 +213,8 @@ public partial class Index : IDisposable
 
     async Task ChangeDriveLift(bool drive)
     {
-        var msg = "You are now looking for others to drive";
-        if (drive) msg = "You are now looking at requests";
+        var msg = _languageTable["ChangeToLift"];
+        if (drive) msg = _languageTable["ChangeToDrive"];
         ToastService.ShowToast(ToastLevel.Info, msg);
         await UpdateUIInformationAsync(drive);
     }
@@ -213,18 +227,20 @@ public partial class Index : IDisposable
         var requestListResponseMessage =
             await _httpClient.PostAsync($"{AppSettings["YberAPIBaseURI"]}ViewLifts?studentName={_UserName}", null);
         var requestList = await requestListResponseMessage.Content.ReadFromJsonAsync<List<LiftDTO>>();
+        var requestingStudentsLocationList = new List<StudentCoordinateDTO>();
         
         if (currentUser == null) return;
         _actualStudent = currentUser;
         switch (drive)
         {
-            case true: // TODO Show list of requests!
+            case true:
                 _actualStudent.Lift_Give = true;
                 _actualStudent.Lift_Take = false;
                 var requestStudentDTOList = new List<StudentDTO>();
                 foreach (var Lift in requestList)
                 {
-                    var studentResponseMessage = await _httpClient.PostAsync($"{AppSettings["YberAPIBaseURI"]}GetStudentsFromID?studentID={Lift.requesterID}", null);
+                    var requestUri = $"{AppSettings["YberAPIBaseURI"]}GetStudentsFromID?studentID={Lift.requesteeID}";
+                    var studentResponseMessage = await _httpClient.PostAsync(requestUri, null);
                     // GetStudentsFromID
                     var student = await studentResponseMessage.Content.ReadFromJsonAsync<StudentDTO>();
                     requestStudentDTOList.Add(new StudentDTO
@@ -235,6 +251,15 @@ public partial class Index : IDisposable
                         Lift_Take = student.Lift_Take,
                         Lift_Give = student.Lift_Give,
                         Username = student.Username
+                    });
+                    requestingStudentsLocationList.Add(new StudentCoordinateDTO
+                    {
+                        name = student.First_Name,
+                        latlng = new latlng
+                        {
+                            lat = student.LatLng[0],
+                            lng = student.LatLng[1]
+                        }
                     });
                 }
                 _studentDataGrid = requestStudentDTOList;
@@ -258,6 +283,7 @@ public partial class Index : IDisposable
         await _LiftGiverGrid.Reload();
         _jsRuntime = JsRuntime;
         if (await GetInfoFromAPIAsync() == false) return;
+        if (drive) _StudentLocationJson = JsonSerializer.Serialize(requestingStudentsLocationList);
         await _jsRuntime.InvokeVoidAsync("initMap", _StudentLocationJson, _ActualStucentLocationJson, _CalculatedRoute.EncodedPolyline);
     }
     
