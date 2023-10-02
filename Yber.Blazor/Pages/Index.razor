@@ -8,9 +8,8 @@
 <PageTitle>@_languageTable["Home"]</PageTitle>
 
 <div class="text-center">
-    <h3>@_languageTable["Welcome1"]@_FirstName@_languageTable["Welcome2"]</h3>
     <RadzenCard class="rz-shadow-6">
-        <h3>Welcome @_FirstName to</h3>
+        <h3>@_languageTable["Welcome1"]@_FirstName@_languageTable["Welcome2"]</h3>
         <img class="m-2" src="/images/Über_logo.png" alt="Kantine logo" style="max-height: 150px" />
     </RadzenCard>
 </div>
@@ -20,14 +19,11 @@
 
 @if (_actualStudent is not null)
 {
-    @if (_actualStudent.Lift_Give == true) {<RadzenButton Click="@(args => ChangeDriveLift(false))">@_languageTable["HaveLift"]</RadzenButton>}
-    @if (_actualStudent.Lift_Take == true) {<RadzenButton Click="@(args => ChangeDriveLift(true))">@_languageTable["GiveLift"] (Dybbøl)</RadzenButton>}
-    
     <div class="text-center">
         <RadzenCard class="rz-shadow-6 m-2">
             <p class="text-center m-1">You want to @if (_actualStudent.Lift_Take == true) {<span>get</span>} @if (_actualStudent.Lift_Give == true) {<span>give</span>} a lift</p>
-            @if (_actualStudent.Lift_Give == true) {<RadzenButton class="m-1" Click="@(args => ChangeDriveLift(false))">Want to have a lift</RadzenButton>}
-            @if (_actualStudent.Lift_Take == true) {<RadzenButton class="m-1" Click="@(args => ChangeDriveLift(true))">Want to offer a ride (Dybbøl)</RadzenButton>}
+            @if (_actualStudent.Lift_Give == true) {<RadzenButton Click="@(args => ChangeDriveLift(false))">@_languageTable["HaveLift"]</RadzenButton>}
+            @if (_actualStudent.Lift_Take == true) {<RadzenButton Click="@(args => ChangeDriveLift(true))">@_languageTable["GiveLift"] (Dybbøl)</RadzenButton>}
         </RadzenCard>
     </div>
     <div class="text-center">
