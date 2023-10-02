@@ -238,7 +238,7 @@ public partial class Index : IDisposable
                 var requestStudentDTOList = new List<StudentDTO>();
                 foreach (var Lift in requestList)
                 {
-                    var studentResponseMessage = await _httpClient.PostAsync($"{AppSettings["YberAPIBaseURI"]}GetStudentsFromID?studentID={Lift.requesterID}", null);
+                    var studentResponseMessage = await _httpClient.PostAsync($"{AppSettings["YberAPIBaseURI"]}GetStudentsFromID?studentID={Lift.requesteeID}", null);
                     // GetStudentsFromID
                     var student = await studentResponseMessage.Content.ReadFromJsonAsync<StudentDTO>();
                     requestStudentDTOList.Add(new StudentDTO
