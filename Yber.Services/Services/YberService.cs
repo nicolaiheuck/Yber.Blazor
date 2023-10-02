@@ -92,13 +92,17 @@ public class YberService : IYberService
     {
         Uber_Students student = await _YberRepository.GetStudentFromIdAsync(studentID);
         
+        double.TryParse(student.Lattitude, CultureInfo.InvariantCulture, out var lat);
+        double.TryParse(student.Longitude, CultureInfo.InvariantCulture, out var lng);
+        
         return student == null ? new StudentDTO() : new StudentDTO
         {
             Id = student.ID,
             First_Name = student.Name_First!,
             Username = student.Username,
             Lift_Give = student.Lift_Give,
-            Lift_Take = student.Lift_Take
+            Lift_Take = student.Lift_Take,
+            LatLng = new [] {lat,lng}
         };
     }
 
@@ -131,5 +135,30 @@ public class YberService : IYberService
         }
 
         return requestDTO;
+    }
+
+    public async Task<StudentDTO> GetStudentFromNameAsync(string studentName)
+    {
+        var student = await _YberRepository.GetStudentFromName(studentName);
+
+        double lat;
+        double lng;
+        Double.TryParse(student.Lattitude, CultureInfo.InvariantCulture, out lat);
+        Double.TryParse(student.Longitude, CultureInfo.InvariantCulture, out lng);
+        var studentDTO = new StudentDTO
+        {
+            Id = student.ID,
+            First_Name = student.Name_First,
+            LatLng = new double[]
+            {
+                lat,
+                lng
+            },
+            Lift_Take = student.Lift_Take,
+            Lift_Give = student.Lift_Give,
+            Username = student.Username
+        };
+
+        return studentDTO;
     }
 }

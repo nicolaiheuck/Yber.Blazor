@@ -1,26 +1,35 @@
 {
-	//Global
-	"AddButton": "Tilføj ny",
-	"Delete": "Slet",
-	"Name": "Navn",
-	"Description": "Beskrivelse",
-	"Equality": "Lighed",
-	"Yes": "Ja",
-	"No": "Nej",
-
-	//Global - Toast Messages
-	"SuccessfullyUpdated": "Opdatering gennemført",
-	"FailedUpdate ": "Kunne ikke opdatere",
-	"SuccessfullyDeleted": "Succesfuldt slettet",
-	"FailedDelete": "Kunne ikke slette",
-	"SuccessfullyCreated": "Succesfuldt oprettet",
-	"FailedCreate": "Kunne ikke oprette",
-
-	//Global - Modal
-	"DeleteConfirmation": "Er du sikker på du vil slette",
-	"NotInDB": "Du er i øjeblikket ikke registreret hos os. kontakt venligst en administrator eller skriv til os på: YberContact@peterhymoellerhotmail.onmicrosoft.com",
-
-	//Index
-	"HelloWorld": "Hej!"
-
+  //Global
+  "AddButton": "Tilføj ny",
+  "Delete": "Slet",
+  "Name": "Navn",
+  "Description": "Beskrivelse",
+  "Equality": "Lighed",
+  "Yes": "Ja",
+  "No": "Nej",
+  //Global - Toast Messages
+  "SuccessfullyUpdated": "Opdatering gennemført",
+  "FailedUpdate ": "Kunne ikke opdatere",
+  "SuccessfullyDeleted": "Succesfuldt slettet",
+  "FailedDelete": "Kunne ikke slette",
+  "SuccessfullyCreated": "Succesfuldt oprettet",
+  "FailedCreate": "Kunne ikke oprette",
+  //Global - Modal
+  "DeleteConfirmation": "Er du sikker på du vil slette",
+  "NotInDB": "Du er i øjeblikket ikke registreret hos os. kontakt venligst en administrator eller skriv til os på: YberContact@peterhymoellerhotmail.onmicrosoft.com",
+  //Index
+  "Home": "Hjem",
+  "Welcome1": "Velkommen ",
+  "Welcome2": " til ÜBER",
+  "HaveLift": "Jeg vil have et lift",
+  "GiveLift": "Jeg vil give et lift",
+  "AcceptRequest": "Accepter liftanmodning",
+  "RequestLift": "Anmod om lift",
+  "NotLoggedIn": "Du er ikke logget ind eller godkendt. Log venligst ind først.",
+  "LiftRequestAccepted": "Liftanmodning godkendt!",
+  "BadRequest": "Hovsa, det var en forkert anmodning. Det er blevet logget i vores system.",
+  "Error1": "Der er sket en fejl i API'en, vores server team er blevet informeret!",
+  "Error2": "En uforklarlig fejl er opstået ...",
+  "ChangeToLift": "Du leder nu efter andre der kan køre",
+  "ChangeToDrive": "Du ser nu på liftanmodninger"
 }
