@@ -139,9 +139,18 @@ public partial class Index : IDisposable
                 var messageFormNotInDb = Modal.Show<InfoMessage>("Info", parametersNotInDb, optionsNotInDb);
                 var resulNotInDbt = await messageFormNotInDb.Result;
             }
-            var currUser = await _httpClient.GetFromJsonAsync<StudentDTO>(
-                $"{AppSettings["YberAPIBaseURI"]}GetStudentFromName?studentName={_UserName}");
-            await UpdateUIInformationAsync((bool)currUser.Lift_Give);
+
+            try
+            {
+                var currUser = await _httpClient.GetFromJsonAsync<StudentDTO>(
+                    $"{AppSettings["YberAPIBaseURI"]}GetStudentFromName?studentName={_UserName}");
+                await UpdateUIInformationAsync((bool)currUser.Lift_Give);
+            }
+            catch (Exception e)
+            {
+                ToastService.ShowError(_languageTable["NotLoggedIn"]);
+                throw;
+            }
         }
     }
 
