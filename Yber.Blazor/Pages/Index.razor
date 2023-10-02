@@ -21,7 +21,6 @@
 {
     <div class="text-center">
         <RadzenCard class="rz-shadow-6 m-2">
-            <p class="text-center m-1">You want to @if (_actualStudent.Lift_Take == true) {<span>get</span>} @if (_actualStudent.Lift_Give == true) {<span>give</span>} a lift</p>
             @if (_actualStudent.Lift_Give == true) {<RadzenButton Click="@(args => ChangeDriveLift(false))">@_languageTable["HaveLift"]</RadzenButton>}
             @if (_actualStudent.Lift_Take == true) {<RadzenButton Click="@(args => ChangeDriveLift(true))">@_languageTable["GiveLift"] (Dybbøl)</RadzenButton>}
         </RadzenCard>
