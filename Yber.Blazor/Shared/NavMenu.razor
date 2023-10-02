@@ -10,14 +10,15 @@
 	</div>
 </div>
 <RadzenPanelMenu Multiple="false">
+	<AuthorizeView Roles="Admin, Elev">
+		<RadzenPanelMenuItem Text="Home" Path="/" Icon="home"></RadzenPanelMenuItem>
+	</AuthorizeView>
 
-	<RadzenPanelMenuItem Text="Home" Path="/" Icon="home"></RadzenPanelMenuItem>
-
-	@*     <AuthorizeView Roles=""> *@
-	@*         <RadzenPanelMenuItem Text="" Icon="">
-	<RadzenPanelMenuItem Text="" Icon="" Path=""></RadzenPanelMenuItem>
-	</RadzenPanelMenuItem> *@
-	@*     </AuthorizeView> *@
+	@*<AuthorizeView Roles="">
+		<RadzenPanelMenuItem Text="" Icon="">
+			<RadzenPanelMenuItem Text="" Icon="" Path=""></RadzenPanelMenuItem>
+		</RadzenPanelMenuItem> 
+	</AuthorizeView> *@
 
 </RadzenPanelMenu>
 
