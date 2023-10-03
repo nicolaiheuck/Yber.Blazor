@@ -29,16 +29,19 @@
 </details>
 
 # Case
-Case bla bla bla
-* Punkt 1
-* Punkt 2
-* Punkt 3
+Inspireret af udenlandske eksempler ønsker IT-Center Syd at udvikle og implementere en række nye IT-services:
+> Fælles Transportplanlægning:
+> 
+>  En applikation, der hjælper elever og personale med at organisere samkørsel eller fælles transportmuligheder.
+ Dette kan bidrage til at reducere antallet af individuelle bilture til skolen og dermed mindske CO2-udledningen.
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 # Requirements
-- [X] Done
-- [X] Done
-- [ ] Todo
+- [X] Lave webapplikation der kan vise medstuderende/ansattes bopæl
+- [X] Vise rute fra bopæl til skole
+- [x] Formidle kontakt mellem brugere med henblik på samkørsel
+- [x] Benytte login for at sikre data
+- [X] Adskille database/api/frontend
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 # Architecture diagram
@@ -46,49 +49,103 @@ Case bla bla bla
 `/Docs/Architecture_Diagram.png`
 
 # Roadmap
-- [X] Done
-  - [ ] Sub thingy not done
-- [X] Done
-- [ ] Not done
-- [ ] Not done
+- [X] Vise kort med markers
+  - [x] Vise rute fra "mig" til skole
+- [X] Kun vise relevante brugere
+  - Frasorterer de brugere der ønsker et lift, hvis man selv ønsker lift
+- [ ] Integrere med eksisterende Azure AD/stamdata
+  - Dette var ikke muligt grundet sikkerhedsspørgsmål fra ITC Syd
+- [X] Vise *proof of concept* vha. simuleret elev-data
 
 
 #  Summary and rundown
-Summary with a sup message<sup>like this</sup> - neat right?
-> This is a quote in the summary
+UBER er lavet som et proof of concept, hvor elever og ansatte kan sørge for samkørsel.
+Meningen er at man som bruger af systemet kan tage stilling til om man vil køre eller have et lift af en anden medstuderende
+eller ansat. 
+
+Når man har valgt, f.eks. at man vil have et lift, vil man på et kort kunne se sin direkte rute til skolen, samt se en markør 
+med navn på de andre der tilbyder at køre med. 
+
+Der kan man så anmode om samkørsel, og den bruger man har valgt vil på sin side kunne se en liste over anmodninger, samt acceptere en anmodning.
+> Peter har ikke selv bil, og vil gerne have muligheden for at køre med en i skolen. Han kan se via systemet at Jan bor længere væk, og at ruten går forbi
+> der hvor Peter bor. 
+> 
+> Peter anmoder derfor Jan om at kunne køre med, og da Jan næste gang logger ind på systemet vil han i en liste kunne se at Peter har anmodet om samkørsel.
+> Jan kan også på et kort se hvor Peter bor ift. hans rute, og han vælger derfor at acceptere anmodningen.
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 # Getting started
-Quick guide with a `code block` 
-
-We also have a code block block thing
-```csharp
-temperature2 = newDHT.readTemperature();
-humidity2 = newDHT.readHumidity();
+For at komme igang med programmet, kræver det tre steps.
+1. Databaseopsætning
+   1. Installer database jf. SQL script der findes under `/setup`
+   2. Opret bruger og giv de korrekte privileges
+2. API opsætning
+   1. Opsæt API med korrekt connection til databasen
+   2. Noter adresse og evt. port på API
+3. Frontend opsætning
+   1. Inden opstart skal API'ens base URI eventuelt rettes. Den findes under `/Yber.Blazor/appsettings.json`
+```json
+  "YberAPIBaseURI": "https://yber-api.tved.it/"
 ```
-
-Make sure to read the setup!
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
-# API endpoints
-| Topics                               | Params    | Method  |
-| :----------------------------------- | :-------- | :------ |
-| ENDPOINT1                            | none      | POST    |
-| ENDPOINT2                            | studentId | GET     |
-
+# API endpoints<sup>1</sup>
+| Topics              | Params                           | Method     |
+|:--------------------|:---------------------------------|:-----------|
+| /GetStudentLift     | none                             | GET        |
+| /GetStudentDriver   | none                             | GET        |
+| /GetStudentRoute    | studentUsername                  | POST       |
+| /RequestLift        | studentUsername, studentUsername | POST       |
+| /AcceptLift         | studentUsername, studentUsername | POST       |
+| /ViewLifts          | studentUsername                  | POST       |
+| /WantLift           | studentId                        | POST       |
+| /OfferDrive         | studentId                        | POST       |
+| /GetStudentsFromID  | studentId                        | POST       |
+| /GetStudentFromName | studentUsername                  | GET        |
 # Libraries
-| Name               | Version | 
-| ------------------ | ------- | 
-| NuGet              | 2.5.7   | 
-| NuGet              | 1.4.4   | 
+## Yber.API
+| Name                                              | Version |
+| :------------------------------------------------ | :------ |
+| Azure.Extensions.AspNetCore.Configuration.Secrets | 1.0.0   |
+| Azure.Identity                                    | 1.6.0   |
+| Microsoft.AspNetCore.Authentication.JwtBearer     | 7.0.11  |
+| Microsoft.AspNetCore.Authentication.OpenIdConnect | 7.0.11  |
+| Microsoft.Identity.Web                            | 2.13.4  |
+| Microsoft.Identity.Web.UI                         | 2.13.4  |
+| Swashbuckle.AspNetCore                            | 6.5.0   |
+| Seq.Extensions.Logging                            | 6.1.0   |
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Yber.Blazor
+| Name                                              | Version |
+| :------------------------------------------------ | :------ |
+| Azure.Extensions.AspNetCore.Configuration.Secrets | 1.0.0   |
+| Azure.Identity                                    | 1.6.0   |
+| Blazored.Modal                                    | 7.1.0   |
+| Blazored.Toast                                    | 4.1.0   |
+| Microsoft.AspNetCore.Authentication.OpenIdConnect | 7.0.11  |
+| Microsoft.Identity.Web                            | 2.13.4  |
+| Microsoft.Identity.Web.MicrosoftGraph             | 2.13.4  |
+| Microsoft.Identity.Web.UI                         | 2.13.4  |
+| Radzen.Blazor                                     | 4.15.14 |
+| Seq.Extensions.Logging                            | 6.1.0   |
+| Toolbelt.Blazor.HotKeys2                          | 3.0.0   |
+| Toolbelt.Blazor.I18nText                          | 12.0.2  |
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Yber.Repositories
+| Name                             | Version |
+| :------------------------------- | :------ |
+| GoogleApi                        | 5.2.1   |
+| Microsoft.EntityFrameworkCore    | 7.0.11  |
+| Pomelo.EntityFrameworkCore.MySql | 7.0.0   |
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 # HIPO Diagrams
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Alarm
 ![alarm hipo diagram](/Docs/Alarm_HIPO.png)
@@ -119,7 +176,7 @@ Make sure to read the setup!
 Project Link: [https://github.com/nicolaiheuck/Yber.Blazor](https://github.com/nicolaiheuck/Yber.Blazor)
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-<sup>1</sup> - Look at me!
+<sup>1</sup> - See swagger for more info
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
