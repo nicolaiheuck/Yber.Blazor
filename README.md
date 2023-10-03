@@ -20,7 +20,7 @@
 - [Getting started](#getting-started)
 - [API endpoints](#api-endpoints)
 - [Libraries](#libraries)
-- [HIPO Diagrams](#hipo-diagrams)
+- [Database diagram](#database-diagram)
   - [Alarm](#alarm-1)
 - [Flowcharts](#flowcharts)
   - [Alarm](#alarm-2)
@@ -145,11 +145,9 @@ For at komme igang med programmet, kræver det tre steps.
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
-# HIPO Diagrams
+# Database Diagram
 
-## Alarm
-![alarm hipo diagram](/Docs/Alarm_HIPO.png)
-`/Docs/Alarm_HIPO.png`
+![DB Diagram.png](DOCS%2FDB%20Diagram.png)
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 # Flowcharts
