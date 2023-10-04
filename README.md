@@ -46,6 +46,7 @@ Inspireret af udenlandske eksempler ønsker IT-Center Syd at udvikle og implemen
 
 # Architecture diagram
 ![architecture diagram](/DOCS/Yber-Architecture-Diagram.drawio.png)
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 # Roadmap
 - [X] Vise kort med markers
@@ -55,6 +56,7 @@ Inspireret af udenlandske eksempler ønsker IT-Center Syd at udvikle og implemen
 - [ ] Integrere med eksisterende Azure AD/stamdata
   - Dette var ikke muligt grundet sikkerhedsspørgsmål fra ITC Syd
 - [X] Vise *proof of concept* vha. simuleret elev-data
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 
 #  Summary and rundown
@@ -105,6 +107,8 @@ For at komme igang med programmet, kræver det fire steps.
 | /OfferDrive         | studentId                        | POST       |
 | /GetStudentsFromID  | studentId                        | POST       |
 | /GetStudentFromName | studentUsername                  | GET        |
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 # Libraries
 ## Yber.API
 | Name                                              | Version |
@@ -117,7 +121,6 @@ For at komme igang med programmet, kræver det fire steps.
 | Microsoft.Identity.Web.UI                         | 2.13.4  |
 | Swashbuckle.AspNetCore                            | 6.5.0   |
 | Seq.Extensions.Logging                            | 6.1.0   |
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Yber.Blazor
 | Name                                              | Version |
@@ -134,7 +137,6 @@ For at komme igang med programmet, kræver det fire steps.
 | Seq.Extensions.Logging                            | 6.1.0   |
 | Toolbelt.Blazor.HotKeys2                          | 3.0.0   |
 | Toolbelt.Blazor.I18nText                          | 12.0.2  |
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Yber.Repositories
 | Name                             | Version |
@@ -146,13 +148,10 @@ For at komme igang med programmet, kræver det fire steps.
 
 
 # Database Diagram
-
 ![DB Diagram.png](DOCS%2FDB%20Diagram.png)
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 # Flowcharts
-
-## Alarm
 ![alarm flowchart](/Docs/Alarm_Flowchart.png)
 `/Docs/Alarm_Flowchart.png`
 <p align="right">(<a href="#top">back to top</a>)</p>
