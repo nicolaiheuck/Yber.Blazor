@@ -75,14 +75,15 @@ Der kan man så anmode om samkørsel, og den bruger man har valgt vil på sin si
 
 
 # Getting started
-For at komme igang med programmet, kræver det tre steps.
-1. Databaseopsætning
+For at komme igang med programmet, kræver det fire steps.
+1. Opsæt Azure CLI
+2. Databaseopsætning
    1. Installer database jf. SQL script der findes under `/setup`
    2. Opret bruger og giv de korrekte privileges
-2. API opsætning
+3. API opsætning
    1. Opsæt API med korrekt connection til databasen
    2. Noter adresse og evt. port på API
-3. Frontend opsætning
+4. Frontend opsætning
    1. Inden opstart skal API'ens base URI eventuelt rettes. Den findes under `/Yber.Blazor/appsettings.json`
 ```json
   "YberAPIBaseURI": "https://yber-api.tved.it/"
