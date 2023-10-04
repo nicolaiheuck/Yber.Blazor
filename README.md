@@ -45,8 +45,7 @@ Inspireret af udenlandske eksempler ønsker IT-Center Syd at udvikle og implemen
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 # Architecture diagram
-![architecture diagram](/Docs/Architecture_Diagram.png)
-`/Docs/Architecture_Diagram.png`
+![architecture diagram](/DOCS/Yber-Architecture-Diagram.drawio.png)
 
 # Roadmap
 - [X] Vise kort med markers
