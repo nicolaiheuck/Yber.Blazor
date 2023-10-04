@@ -18,7 +18,7 @@
 - [Roadmap](#roadmap)
 - [Summary and rundown](#summary-and-rundown)
 - [Getting started](#getting-started)
-- [API endpoints](#api-endpoints<sup>1</sup>)
+- [API endpoints](#api-endpoints1)
 - [Libraries](#libraries)
 - [Database diagram](#database-diagram)
   - [Alarm](#alarm-1)
