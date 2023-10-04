@@ -18,7 +18,7 @@
 - [Roadmap](#roadmap)
 - [Summary and rundown](#summary-and-rundown)
 - [Getting started](#getting-started)
-- [API endpoints](#api-endpoints)
+- [API endpoints](#api-endpoints<sup>1</sup>)
 - [Libraries](#libraries)
 - [Database diagram](#database-diagram)
   - [Alarm](#alarm-1)
@@ -59,7 +59,7 @@ Inspireret af udenlandske eksempler ønsker IT-Center Syd at udvikle og implemen
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
-#  Summary and rundown
+# Summary and rundown
 UBER er lavet som et proof of concept, hvor elever og ansatte kan sørge for samkørsel.
 Meningen er at man som bruger af systemet kan tage stilling til om man vil køre eller have et lift af en anden medstuderende
 eller ansat. 
