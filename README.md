@@ -159,9 +159,8 @@ For at komme igang med programmet, kræver det tre steps.
 
 
 # License
-* Hardware: CC-BY-LA (Creative Commons)
-* API: GPLv3
-* Frontend: GPLv3
+* API: MIT
+* Frontend: MIT
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 # Contact
