@@ -21,9 +21,7 @@
 - [API endpoints](#api-endpoints1)
 - [Libraries](#libraries)
 - [Database diagram](#database-diagram)
-  - [Alarm](#alarm-1)
 - [Flowcharts](#flowcharts)
-  - [Alarm](#alarm-2)
 - [License](#license)
 - [Contact](#contact)
 </details>
